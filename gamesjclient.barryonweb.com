@@ -1,0 +1,26 @@
+server {
+  server_name gamesjclient.barryonweb.com;
+
+  root /var/www/games/frontend;
+  index index.html;
+
+  location / {
+    try_files $uri /index.html;
+  }
+
+  listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/gamesjclient.barryonweb.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/gamesjclient.barryonweb.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = gamesjclient.barryonweb.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+  listen 80;
+  server_name gamesjclient.barryonweb.com;
+    return 404; # managed by Certbot
+}
