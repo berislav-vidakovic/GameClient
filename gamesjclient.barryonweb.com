@@ -4,6 +4,11 @@ server {
   root /var/www/games/frontend;
   index index.html;
 
+  # Redirect root to /panel
+  location = / {
+      return 302 /panel/;
+  }
+
   # PANEL
   location /panel/ {
       try_files $uri $uri/ /panel/index.html;

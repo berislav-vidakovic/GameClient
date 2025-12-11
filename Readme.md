@@ -184,16 +184,33 @@
 ### 5. Troubleshooting 
 
 1. Check Nginx health & config
-  ```bash
-  sudo systemctl status nginx --no-pager
-  sudo nginx -t
-  ```
+    ```bash
+    sudo systemctl status nginx --no-pager
+    sudo nginx -t
+    ```
 
 2. Inspect Nginx error log
-  ```bash
-  sudo tail -n 200 /var/log/nginx/error.log
-  sudo tail -f /var/log/nginx/error.log # follow live
-  ```
+    ```bash
+    sudo tail -n 200 /var/log/nginx/error.log
+    sudo tail -f /var/log/nginx/error.log # follow live
+    ```
 
 3. Root folder in Nginx config must contain index.html
+
+4. Error
+    ```bash
+    Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec.
+    ```
+    - Add trailing slash in Nginx config
+
+5. Error
+    ```bash
+    gamesjclient.barryonweb.com/:1  GET https://gamesjclient.barryonweb.com/ 403 (Forbidden)
+    ```
+    - Reditect root to /panel in Nginx config
+      ```nginx
+      location = / {
+        return 302 /panel/;
+      }
+      ```
 
