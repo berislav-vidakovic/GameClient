@@ -1,6 +1,11 @@
-## Setup for Deployment
+## Frontend Deployment
 
-### Create minimal Nginx config file
+1. [Create minimal Nginx config file](#1-create-minimal-nginx-config-file)  
+2. [Issue SSL certificate](#2-issue-ssl-certificate)  
+3. [Initialize Git and make first commit](#3-initialize-git-and-make-first-commit)  
+4. [Add CI/CD yaml](#4-add-cicd-yaml)
+
+### 1. Create minimal Nginx config file
   ```nginx
   server {
     listen 80;
@@ -15,7 +20,7 @@
   }
   ```
 
-### Issue SSL certificate
+### 2. Issue SSL certificate
 
 - Output: Certbot will update Nginx config file
   ```nginx
@@ -77,9 +82,7 @@
   ```
 
 
-### Link to Github Repo
-
-#### Initialize Git and make first commit 
+### 3. Initialize Git and make first commit 
 
 1. Create Github Repo
 
@@ -89,9 +92,9 @@
 3. SSH connection Dev to Remote Repo
 
   - Test connection Dev-VPS
-  ```bash
-  ssh -i ~/.ssh/github_ci barry75@barryonweb.com
-  ```
+    ```bash
+    ssh -i ~/.ssh/github_ci barry75@barryonweb.com
+    ```
 
   - Establish connection Github-VPS (Repository-specific)
     - Add the Private Key ~/.ssh/github_ci to GitHub Secrets
@@ -104,6 +107,79 @@
 
 
 
-### Add CI/CD yaml
+### 4. Add CI/CD yaml
+  ```yaml
+  name: Deploy TypeScript Frontend
+
+  on:
+    push:
+      branches:
+        - main
+    workflow_dispatch:
+
+  jobs:
+    frontend-build-and-deploy:
+      runs-on: ubuntu-latest
+
+      steps:
+        # Checkout code
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        # Setup Node.js environment
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 20
+
+        # GitHub - Install frontend dependencies and build
+        - name: Build frontend
+          run: |
+            npm install  
+            cd panel
+            npm install
+            npm run build
+            cd ../sudoku
+            npm install
+            npm run build
+            cd ../connect4
+            npm install
+            npm run build
+
+        # Start SSH agent with GitHub secret key
+        - name: Setup SSH
+          uses: webfactory/ssh-agent@v0.9.0
+          with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+        # Add server to known_hosts to avoid verification errors
+        - name: Add server to known_hosts
+          run: |
+            mkdir -p ~/.ssh
+            ssh-keyscan barryonweb.com >> ~/.ssh/known_hosts
+        
+        # Nginx config - transfer, enable, check syntax and restart Nginx
+        - name: Update Nginx config
+          run: |
+            ssh barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
+            scp gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
+            ssh barry75@barryonweb.com "
+              sudo cp /var/www/games/nginx/gamesjclient.barryonweb.com /etc/nginx/sites-available/ &&
+              sudo ln -sf /etc/nginx/sites-available/gamesjclient.barryonweb.com /etc/nginx/sites-enabled/ &&
+              sudo nginx -t &&
+              sudo systemctl reload nginx"
+        
+
+        # Transfer frontend from GitHub Repo to Ubuntu server via SCP
+        - name: Deploy frontend via SSH to server
+          run: |
+            ssh barry75@barryonweb.com "mkdir -p /var/www/games/frontend/panel"
+            scp -r panel/dist/* barry75@barryonweb.com:/var/www/games/frontend/panel/
+            ssh barry75@barryonweb.com "mkdir -p /var/www/games/frontend/sudoku"
+            scp -r sudoku/dist/* barry75@barryonweb.com:/var/www/games/frontend/sudoku/
+            ssh barry75@barryonweb.com "mkdir -p /var/www/games/frontend/connect4"
+            scp -r connect4/dist/* barry75@barryonweb.com:/var/www/games/frontend/connect4/
+  ```
+
 
 
