@@ -79,14 +79,27 @@
 
 ### Link to Github Repo
 
-#### SSH connection Dev to Remote Repo
-
 #### Initialize Git and make first commit 
 
 1. Create Github Repo
 
 2. <a href="docs/Git.md">Create remote repo, init, commit and  push
 </a>
+
+3. SSH connection Dev to Remote Repo
+
+  - Test connection Dev-VPS
+  ```bash
+  ssh -i ~/.ssh/github_ci barry75@barryonweb.com
+  ```
+
+  - Establish connection Github-VPS (Repository-specific)
+    - Add the Private Key ~/.ssh/github_ci to GitHub Secrets
+      - GitHub: Settings → Secrets and variables → Actions → New repository secret
+      - Create secret key: 
+        - Name: SSH_PRIVATE_KEY
+        - Content: Paste full content of private key github_ci
+
 
 
 
