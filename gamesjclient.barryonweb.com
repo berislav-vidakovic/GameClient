@@ -1,11 +1,22 @@
 server {
   server_name gamesjclient.barryonweb.com;
 
-  root /var/www/games/frontend/panel;
+  root /var/www/games/frontend;
   index index.html;
 
-  location / {
-    try_files $uri /index.html;
+  # PANEL
+  location /panel/ {
+      try_files $uri $uri/ /panel/index.html;
+  }
+
+  # SUDOKU
+  location /sudoku/ {
+      try_files $uri $uri/ /sudoku/index.html;
+  }
+
+  # CONNECT4
+  location /connect4/ {
+      try_files $uri $uri/ /connect4/index.html;
   }
 
   listen 443 ssl; # managed by Certbot

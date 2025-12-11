@@ -195,3 +195,5 @@
   sudo tail -f /var/log/nginx/error.log # follow live
   ```
 
+3. Root folder in Nginx config must contain index.html
+
