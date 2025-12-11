@@ -11,7 +11,7 @@
     listen 80;
     server_name gamesjclient.barryonweb.com;
 
-    root /var/www/games/frontend;
+    root /var/www/games/frontend/panel;
     index index.html;
 
     location / {
@@ -27,7 +27,7 @@
   server {
     server_name gamesjclient.barryonweb.com;
 
-    root /var/www/games/frontend;
+    root /var/www/games/frontend/panel;
     index index.html;
 
     location / {
@@ -181,5 +181,17 @@
             scp -r connect4/dist/* barry75@barryonweb.com:/var/www/games/frontend/connect4/
   ```
 
+### 5. Troubleshooting 
 
+1. Check Nginx health & config
+  ```bash
+  sudo systemctl status nginx --no-pager
+  sudo nginx -t
+  ```
+
+2. Inspect Nginx error log
+  ```bash
+  sudo tail -n 200 /var/log/nginx/error.log
+  sudo tail -f /var/log/nginx/error.log # follow live
+  ```
 

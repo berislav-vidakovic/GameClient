@@ -1,7 +1,7 @@
 server {
   server_name gamesjclient.barryonweb.com;
 
-  root /var/www/games/frontend;
+  root /var/www/games/frontend/panel;
   index index.html;
 
   location / {
