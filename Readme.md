@@ -207,10 +207,39 @@
     ```bash
     gamesjclient.barryonweb.com/:1  GET https://gamesjclient.barryonweb.com/ 403 (Forbidden)
     ```
-    - Reditect root to /panel in Nginx config
+    - Redirect root to /panel in Nginx config
       ```nginx
       location = / {
         return 302 /panel/;
       }
       ```
 
+6. Websocket Error
+  ```bash
+  index-D35_W3zx.js:49 WebSocket connection to 'wss://gamesj.barryonweb.com/websocket?id=46653a80-acdb-48ff-ad5b-df7bb39cb093' failed: 
+  Gv @ index-D35_W3zx.js:49
+  (anonymous) @ index-D35_W3zx.js:49
+  hu @ index-D35_W3zx.js:48
+  E0 @ index-D35_W3zx.js:48
+  pt @ index-D35_W3zx.js:48
+  E0 @ index-D35_W3zx.js:48
+  x0 @ index-D35_W3zx.js:48
+  (anonymous) @ index-D35_W3zx.js:48
+  ql @ index-D35_W3zx.js:17Understand this error
+  index-D35_W3zx.js:49 WebSocket error: Event {isTrusted: true, type: 'error', target: WebSocket, currentTarget: WebSocket, eventPhase: 2, …}
+  Gv.$e.onerror @ index-D35_W3zx.js:49Understand this error
+  index-D35_W3zx.js:49 WebSocket closed by server: 
+  ```
+
+  - Backend Nginx config: At the top, outside server blocks add
+    ```nginx
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+    }
+    ```
+  - Replace in nginx config /api
+    ```nginx
+    proxy_set_header Connection keep-alive; # old
+    proxy_set_header Connection $connection_upgrade; # new
+    ```

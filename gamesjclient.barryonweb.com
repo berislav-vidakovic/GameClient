@@ -1,42 +1,62 @@
 server {
-  server_name gamesjclient.barryonweb.com;
+    server_name gamesjclient.barryonweb.com;
 
-  root /var/www/games/frontend;
-  index index.html;
+    # Main site redirect
+    location = / {
+        return 302 /panel/;
+    }
 
-  # Redirect root to /panel
-  location = / {
-      return 302 /panel/;
-  }
+    root /var/www/games/frontend;
+    index index.html;
 
-  # PANEL
-  location /panel/ {
-      try_files $uri $uri/ /panel/index.html;
-  }
+    location / {
+        try_files $uri /index.html;
+    }
 
-  # SUDOKU
-  location /sudoku/ {
-      try_files $uri $uri/ /sudoku/index.html;
-  }
+    # Redirect /panel → /panel/
+    location = /panel {
+        return 301 /panel/;
+    }
 
-  # CONNECT4
-  location /connect4/ {
-      try_files $uri $uri/ /connect4/index.html;
-  }
+    location /panel/ {
+        root /var/www/games/frontend;
+        index index.html;
+        try_files $uri /panel/index.html;
+    }
 
-  listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/gamesjclient.barryonweb.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/gamesjclient.barryonweb.com/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    # Redirect /sudoku → /sudoku/
+    location = /sudoku {
+        return 301 /sudoku/;
+    }
+
+    location /sudoku/ {
+        root /var/www/games/frontend;
+        index index.html;
+        try_files $uri /sudoku/index.html;
+    }
+
+    # Redirect /connect4 → /connect4/
+    location = /connect4 {
+        return 301 /connect4/;
+    }
+
+    location /connect4/ {
+        root /var/www/games/frontend;
+        index index.html;
+        try_files $uri /connect4/index.html;
+    }
+
+    listen 443 ssl; # managed by Certbot
+      ssl_certificate /etc/letsencrypt/live/gamesjclient.barryonweb.com/fullchain.pem; # managed by Certbot
+      ssl_certificate_key /etc/letsencrypt/live/gamesjclient.barryonweb.com/privkey.pem; # managed by Certbot
+      include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+      ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 }
 
+# Redirect all HTTP requests to HTTPS
 server {
-    if ($host = gamesjclient.barryonweb.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
   listen 80;
   server_name gamesjclient.barryonweb.com;
-    return 404; # managed by Certbot
+  return 301 https://$host$request_uri;
 }
