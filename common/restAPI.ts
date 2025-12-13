@@ -1,5 +1,83 @@
+// restAPI.ts
+
 import { StatusCodes } from "http-status-codes"
 import  { URL_BACKEND_HTTP }  from './config';
+
+
+/* client code:
+const msgBody = JSON.stringify({ name: "Alice" });
+const res = await sendPOSTRequestAsync("users", msgBody);
+switch (res.status) {
+  case StatusCodes.OK: // 200
+    console.log("User updated:", res.data);
+    break;
+  case StatusCodes.CREATED: // 201
+    console.log("User created:", res.data);
+    break;
+  case StatusCodes.ACCEPTED: //202
+    console.log("Request accepted:", res.data);
+    break;
+  case StatusCodes.BAD_REQUEST: // 400
+    console.error("Bad request:", res.data);
+    break;
+  default:
+    console.warn("Other status code:", res.status, res.data);
+}
+*/
+
+export interface ApiResponse {
+  status: number;
+  data: any; // parsed JSON or null
+}
+
+export async function sendGETRequestAsync(endpoint: string): Promise<ApiResponse> {
+  const response = await fetch(`${URL_BACKEND_HTTP}/${endpoint}`, {
+    headers: {
+      "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+      "Content-Type": "application/json"
+    },
+  });
+
+  // Parse body if there is content
+  const data = response.status !== StatusCodes.NO_CONTENT // 204
+             ? await response.json() 
+             : null;
+
+  // Return both status and data
+  return { status: response.status, data };
+}
+
+export async function sendPOSTRequestAsync(
+  endpoint: string,
+  msgBody: string
+): Promise<ApiResponse> {
+
+  const response = await fetch(`${URL_BACKEND_HTTP}/${endpoint}`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+      "Content-Type": "application/json"
+    },
+    body: msgBody,
+  });
+
+  const data  = response.status !== StatusCodes.NO_CONTENT // 204
+              ? await response.json() 
+              : null;
+
+  return { status: response.status, data };
+}
+
+
+export async function sendGETRequestAsync1(endpoint: string): Promise<any> {
+    //console.log("Sending GET: ", `${URL_BACKEND_HTTP}/${endpoint}` );
+    const response = await fetch(`${URL_BACKEND_HTTP}/${endpoint}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch test cases: ${response.status}`);
+    }
+    return await response.json(); // Call once - content consumed
+}
+
 
 // Generic GET sending
 export async function sendGETRequest(endpoint: string, handleResponse: (data: any) => void ): Promise<any> {

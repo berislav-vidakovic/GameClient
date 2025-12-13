@@ -17,6 +17,7 @@ export async function getAllUsers(
   handleGetUsers: (data: any) => void
 ) {
     sendGETRequest(GETusersEndpoint, handleGetUsers);
+    
     //console.log("GET users sent...");
 }
 
