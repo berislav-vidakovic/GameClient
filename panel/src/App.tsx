@@ -42,6 +42,9 @@ function App() {
   const [techStack, setTechStack] = useState<string[]>([]);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
   const autoLoginRef = useRef(autoLogin);
+  const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
+  //const apiDesign = 'REST';
+
 
   
   useEffect(() => { // React ref is synchronous and always holds the latest value
@@ -49,18 +52,20 @@ function App() {
   }, [autoLogin]);
 
   useEffect( () => { 
-    loadCommonConfig(setConfigLoaded);     
+    loadCommonConfig(setConfigLoaded, setApiDesign);     
   }, []);
 
   useEffect( () => { if( isConfigLoaded){
-      setStateFunctionRefs(setInitialized, setUsersRegistered, 
-        setCurrentUserId, setOnlineUsers, setCallerUserId, setCalleeUserId,
-        setInvitationState, setSelectedGame, setTechStack );      
-      
-      getAllUsers(handleResponseGetAllUsers );
-      getLocalization().then(() => {
-        setLocalesLoaded(true); // mark locales as loaded
-      });
+    console.log("API Design option: ", apiDesign);
+
+    setStateFunctionRefs(setInitialized, setUsersRegistered, 
+      setCurrentUserId, setOnlineUsers, setCallerUserId, setCalleeUserId,
+      setInvitationState, setSelectedGame, setTechStack );      
+    
+    getAllUsers(handleResponseGetAllUsers );
+    getLocalization().then(() => {
+      setLocalesLoaded(true); // mark locales as loaded
+    });
    }      
   }, [isConfigLoaded]); 
 

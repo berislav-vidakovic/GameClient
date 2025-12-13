@@ -19,10 +19,12 @@ function App() {
   const [myColor, setMyColor] = useState<"Red" | "Yellow" | null>(null); 
   const [gameState, setGameState] = 
     useState<"init" | "myMove" | "theirMove" | "draw" | "myWin" | "theirWin" | null>(null); 
+  const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
+
   
   // Common config
   useEffect( () => { // After opening new Browser window
-    loadCommonConfig(setConfigLoaded);     
+    loadCommonConfig(setConfigLoaded, setApiDesign);     
     //console.log( "Loading Config ... ", isConfigLoaded);
     let gameID;
     let senderID;
@@ -57,6 +59,7 @@ function App() {
   // Common init
   useEffect( () => { 
     if( !isConfigLoaded || gameId == null ) return;
+    console.log("API Design option: ", apiDesign);
     const body = JSON.stringify({gameId, userId});
     console.log("SENDING POST to /api/games/init:", body);
     sendPOSTRequest( 'api/games/init', body, handleResponseInit);

@@ -17,14 +17,17 @@ function App() {
   const [selectedGameIdx, setSelectedGameIdx] = useState<number | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const [startTimer, setStartTimer] = useState(false);  
+  const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
+
   
   useEffect( () => { 
-    loadCommonConfig(setConfigLoaded);     
+    loadCommonConfig(setConfigLoaded, setApiDesign);     
     const params = new URLSearchParams(window.location.search);
     console.log( "Params: userId=", params.get('userId') );
   }, []);
 
    useEffect( () => { if( isConfigLoaded){
+      console.log("API Design option: ", apiDesign);
       sendGETRequest('api/sudoku/board', handleInit );
    }      
   }, [isConfigLoaded]);

@@ -30,7 +30,9 @@ export const getTitle = (paramKey: string, lang: 'en' | 'de' | 'hr' | null = nul
 }
 
 export async function loadCommonConfig(
-  setConfigLoaded:  Dispatch<SetStateAction<boolean>>
+  setConfigLoaded:  Dispatch<SetStateAction<boolean>>,
+  setApiDesign:  Dispatch<SetStateAction<'REST' | 'GraphQL'>>
+  
 ): Promise<void> {
   const currentEnv = detectEnv();
   const response = await fetch('clientsettings.json');
@@ -42,6 +44,7 @@ export async function loadCommonConfig(
   console.log(`Loaded environment: ${currentEnv}`);
   
   let backend = 'backendJavaMySQL';  
+  setApiDesign("REST");
 
   URL_BACKEND_HTTP = config.urlBackend[backend][currentEnv].HTTP;
   URL_BACKEND_WS = config.urlBackend[backend][currentEnv].WS;
