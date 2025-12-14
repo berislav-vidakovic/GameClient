@@ -16,9 +16,22 @@ const POSTrunGame = 'api/games/run';
 export async function getAllUsers(
   handleGetUsers: (data: any) => void
 ) {
-    sendGETRequest(GETusersEndpoint, handleGetUsers);
     
-    //console.log("GET users sent...");
+    //sendGETRequest(GETusersEndpoint, handleGetUsers);
+
+    const url = "http://localhost:8083/graphql";
+    const body = JSON.stringify({ 
+      query: `{ getAllUsers { id, techstack, users { userId, login, fullName, isOnline } } }` });
+
+    const res = await fetch( url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body
+    });  
+    const json = await res.json();
+    console.log( "GraphQL getAllUsers response: ", json);    
 }
 
 
