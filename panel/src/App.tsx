@@ -43,8 +43,6 @@ function App() {
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
   const autoLoginRef = useRef(autoLogin);
   const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
-  //const apiDesign = 'REST';
-
 
   
   useEffect(() => { // React ref is synchronous and always holds the latest value
@@ -62,7 +60,7 @@ function App() {
       setCurrentUserId, setOnlineUsers, setCallerUserId, setCalleeUserId,
       setInvitationState, setSelectedGame, setTechStack );      
     
-    getAllUsers(handleResponseGetAllUsers );
+    getAllUsers(handleResponseGetAllUsers ); // calls setInitialized in response handler
     getLocalization().then(() => {
       setLocalesLoaded(true); // mark locales as loaded
     });

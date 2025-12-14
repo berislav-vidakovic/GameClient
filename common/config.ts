@@ -62,7 +62,24 @@ export async function loadCommonConfig(
     URL_MEMORY = config.urlFrontend[currentEnv][backend].memory;
   }
 
+  // GraphQL test
+  await testGraphQLendpoint();
+
   setConfigLoaded(true);
+}
+
+async function testGraphQLendpoint(){
+  const url = "http://localhost:8083/graphql";
+  const body = JSON.stringify({ query: "{ pingDb }"});
+  const res = await fetch( url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body
+  });  
+  const json = await res.json();
+  console.log( "GraphQL response: ", json);
 }
 
 export async function getLocalization(): Promise<void> {

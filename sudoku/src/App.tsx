@@ -24,6 +24,9 @@ function App() {
     loadCommonConfig(setConfigLoaded, setApiDesign);     
     const params = new URLSearchParams(window.location.search);
     console.log( "Params: userId=", params.get('userId') );
+
+    
+
   }, []);
 
    useEffect( () => { if( isConfigLoaded){
