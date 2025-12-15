@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "@common/style.css";
 import '@common/style-mobile.css';
 
-import { startGame, swapColors, stringToMatrix, updateSetBoardRows, 
-  insertDisk, newGame, reConnect } from './gameLogic'
+import { startGame, swapColors, insertDisk, newGame, stringToMatrix, updateSetBoardRows, 
+   reConnect } from './gameLogic'
 
 
 const okSound = new Audio("sounds/OK.wav");  

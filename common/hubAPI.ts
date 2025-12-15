@@ -1,0 +1,31 @@
+import { sendGETRequestAsync } from './restAPI';
+import type { ApiResponse } from './restAPI';
+import { queryGetAllUsers } from './graphQL';
+import { StatusCodes } from 'http-status-codes';
+
+const GETusersEndpoint = 'api/users/all';
+//const POSTuserRegisterEndpoint = 'api/users/new';
+//const POSTuserLoginEndpoint = 'api/users/login';
+//const POSTloginRefreshEndpoint = 'api/auth/refresh';
+//const POSTuserLogoutEndpoint = 'api/users/logout';
+//const POSTinviteEndpoint = 'api/invitations/invite';
+//const POSTcancelEndpoint = 'api/invitations/cancel';
+//const POSTacceptEndpoint = 'api/invitations/accept';
+//const POSTrejectEndpoint = 'api/invitations/reject';
+//const POSTrunGame = 'api/games/run';
+
+export async function getAllUsersAPI(apiOption: 'REST' | 'GraphQL') {
+  let jsonResp: string = "";
+  if( apiOption == 'GraphQL' ) 
+    jsonResp = await queryGetAllUsers();
+  else if( apiOption == 'REST' ) {
+    //sendGETRequest(GETusersEndpoint, handleResponseGetAllUsers);
+    const apiResp : ApiResponse = await sendGETRequestAsync(GETusersEndpoint);
+    if( apiResp.status == StatusCodes.OK )
+      jsonResp = apiResp.data;
+    else
+      console.error("Error fetching all users. STATUS: ", apiResp.status );
+  }
+
+  return jsonResp;
+}

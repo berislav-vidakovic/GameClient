@@ -2,6 +2,7 @@
 
 import type { Dispatch, SetStateAction } from "react";
 import { sendGETRequest } from './restAPI';
+import { queryPingDb } from './graphQL';
 import type { Locales } from './interfaces';
 
 export let URL_BACKEND_HTTP = '';
@@ -44,7 +45,8 @@ export async function loadCommonConfig(
   console.log(`Loaded environment: ${currentEnv}`);
   
   let backend = 'backendJavaMySQL';  
-  setApiDesign("REST");
+  //setApiDesign("REST");
+  setApiDesign("GraphQL");
 
   URL_BACKEND_HTTP = config.urlBackend[backend][currentEnv].HTTP;
   URL_BACKEND_WS = config.urlBackend[backend][currentEnv].WS;
@@ -63,24 +65,12 @@ export async function loadCommonConfig(
   }
 
   // GraphQL test
-  await testGraphQLendpoint();
+  await queryPingDb();
 
   setConfigLoaded(true);
 }
 
-async function testGraphQLendpoint(){
-  const url = "http://localhost:8083/graphql";
-  const body = JSON.stringify({ query: "{ pingDb }"});
-  const res = await fetch( url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });  
-  const json = await res.json();
-  console.log( "GraphQL response: ", json);
-}
+
 
 export async function getLocalization(): Promise<void> {
   return new Promise((resolve) => {

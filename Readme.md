@@ -106,6 +106,11 @@
         - Content: Paste full content of private key github_ci
 
 
+4. Compile Typescript
+
+  ```ts
+  npm run build
+  ```
 
 
 
@@ -247,3 +252,40 @@ On the frontend, ES modules already give singleton semantics, so a function-base
 This is common codebase, with runtime configuration-based switch to one of the following backends
 - REST API with MySQL
 - GraphQL API with Hasura and PostgreSQL
+
+
+### 7. GraphQL calls
+
+ - Test endpoint ping
+    ```ts
+    async function testGraphQLendpoint(){
+      const url = "http://localhost:8083/graphql";
+      const body = JSON.stringify({ query: "{ pingDb }"});
+      const res = await fetch( url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body
+      });  
+      const json = await res.json();
+      console.log( "GraphQL response: ", json);
+    }
+    ```
+
+ - Get all users
+    ```ts
+    const body = JSON.stringify({ 
+        query: `{ UsersAll { id, techstack, users { userId, login, fullName, isOnline } } }` });
+
+    const res = await fetch( url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body
+    });  
+    const json = await res.json();
+    console.log( "GraphQL getAllUsers response: ", json);  
+    ```
+
