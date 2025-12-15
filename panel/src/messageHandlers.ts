@@ -46,6 +46,8 @@ export  const handleResponseGetAllUsers = ( jsonResp: any ) => {
     fullname: u.fullName,  
     isonline: u.isOnline   
   }));
+  console.log("***All users:", mappedUsers );
+
   const onlineusers = mappedUsers.filter( u => u.isonline == true ).length;
   //console.log("Online user(s):", onlineusers );
   setOnlineUsersRef( onlineusers );

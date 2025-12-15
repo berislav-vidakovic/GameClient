@@ -1,8 +1,10 @@
-import { sendGETRequest, sendPOSTRequest } from '@common/restAPI';
-import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
-  handleInvite, handleResponseRunGame } from './messageHandlers';
+import { sendPOSTRequest } from '@common/restAPI';
+import { getAllUsersAPI } from '@common/hubAPI';
 
-const GETusersEndpoint = 'api/users/all';
+import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
+  handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
+import { apiOption } from './App';
+
 const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTuserLoginEndpoint = 'api/users/login';
 const POSTloginRefreshEndpoint = 'api/auth/refresh';
@@ -13,26 +15,12 @@ const POSTacceptEndpoint = 'api/invitations/accept';
 const POSTrejectEndpoint = 'api/invitations/reject';
 const POSTrunGame = 'api/games/run';
 
-export async function getAllUsers(
-  handleGetUsers: (data: any) => void
-) {
-    const url = "http://localhost:8083/graphql";
-    const body = JSON.stringify({ 
-      query: `{ getAllUsers { id, techstack, users { userId, login, fullName, isOnline } } }` });
-
-    const res = await fetch( url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body
-    });  
-    const json = await res.json();
-    console.log( "GraphQL getAllUsers response: ", json);    
-
-    if( !json )
-      sendGETRequest(GETusersEndpoint, handleGetUsers);
-
+export async function getAllUsers() {  
+  const jsonResp: string = await getAllUsersAPI( apiOption );
+  if( jsonResp )
+    handleResponseGetAllUsers( jsonResp );    
+  else
+    console.error("Error fetching all users. No data received." );
 }
 
 

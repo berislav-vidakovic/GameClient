@@ -15,12 +15,14 @@ import { loadCommonConfig, getTitle, getLocalization } from '@common/config';
 import { useState, useEffect, useRef } from 'react';
 import { connectWS } from '@common/webSocket';
 import type { User } from '@common/interfaces';
-import { setStateFunctionRefs, handleResponseGetAllUsers, handleWsMessage } from './messageHandlers';
+import { setStateFunctionRefs, handleWsMessage } from './messageHandlers';
 import { getAllUsers, logoutUser, inviteUser, runGame, loginRefresh } from './utils';
 import RegisterDialog from './components/RegisterDialog.tsx' 
 import LoginDialog from './components/LoginDialog.tsx' 
 import InviteDialog from './components/InviteDialog.tsx' 
 import { StatusCodes } from 'http-status-codes';
+
+export let apiOption: 'REST' | 'GraphQL' = 'REST';
 
 function App() {
   const [currentLang, setCurrentLangState] = useState<'en' | 'de' | 'hr' | null>(null);
@@ -55,12 +57,13 @@ function App() {
 
   useEffect( () => { if( isConfigLoaded){
     console.log("API Design option: ", apiDesign);
+    apiOption = apiDesign;
 
     setStateFunctionRefs(setInitialized, setUsersRegistered, 
       setCurrentUserId, setOnlineUsers, setCallerUserId, setCalleeUserId,
       setInvitationState, setSelectedGame, setTechStack );      
     
-    getAllUsers(handleResponseGetAllUsers ); // calls setInitialized in response handler
+    getAllUsers(); // calls setInitialized in response handler
     getLocalization().then(() => {
       setLocalesLoaded(true); // mark locales as loaded
     });
