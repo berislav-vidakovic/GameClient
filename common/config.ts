@@ -1,7 +1,6 @@
 // common/config.ts
 
 import type { Dispatch, SetStateAction } from "react";
-import { sendGETRequest } from './restAPI';
 import { queryPingDb } from './graphQL';
 import { getLocalizationAPI, setApiOption } from './hubAPI';
 

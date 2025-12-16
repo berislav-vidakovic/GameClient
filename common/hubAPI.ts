@@ -36,3 +36,4 @@ export async function getLocalizationAPI() {
   //apiOption == 'REST'  
   return await getLocalizationREST();
 }
+
