@@ -17,7 +17,8 @@
 //  it can be normalized in these Facade functions before returning to the caller
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
-  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST } from './restAPIsend';
+  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
+  setTestedOkREST } from './restAPIsend';
 import { queryGetAllUsers } from './graphQL';
 
 // Strategy pattern
@@ -76,5 +77,13 @@ export async function getSudokuBoardsAPI(){
   //apiOption == 'REST'  
   return await getSudokuBoardsREST();
 }
+
+export async function setTestedOkAPI(board: string, name: string){
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await setTestedOkREST(board, name);
+}
+
 
 // CONNECT4 game API functions --------------------------------------------

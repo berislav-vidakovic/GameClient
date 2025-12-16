@@ -15,6 +15,8 @@ const POSTuserLogoutEndpoint = 'api/users/logout';
 const GETlocalizationEnpoint = 'api/localization/get';
 
 const GETsudokuBoardsEnpoint = 'api/sudoku/board';
+const POSTsudokuTestedOK = 'api/sudoku/tested';
+
 
 // PANEL client API functions ----------------------------------------------
 export async function getAllUsersREST() {
@@ -76,6 +78,15 @@ export async function getSudokuBoardsREST(){
     return resp.data;
   return null;
 }
+
+export async function setTestedOkREST(board: string, name: string){
+  const body = JSON.stringify({ board, name });
+  const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuTestedOK, body );
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
 
 // CONNECT4 game API functions --------------------------------------------
 

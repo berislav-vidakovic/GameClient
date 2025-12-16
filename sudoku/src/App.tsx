@@ -1,7 +1,7 @@
 // App.tsx
 import Board from "./Board";
 import { sendPOSTRequest } from '@common/restAPI';
-import { getSudokuBoardsAPI } from '@common/hubAPI';
+import { getSudokuBoardsAPI, setTestedOkAPI } from '@common/hubAPI';
 import { loadCommonConfig } from '@common/config';
 import { useEffect, useState } from "react";
 import { StatusCodes } from "http-status-codes";
@@ -101,6 +101,25 @@ function App() {
     setLevel(1);
     setBoardsLoaded(true);
   };
+
+  const handleTestedOK = ( jsonResp: any ) => {
+    console.log("Tested OK response: ", jsonResp );
+    console.log(boardString, name, games[selectedGameIdx as number].name); 
+    if( jsonResp ){
+      const game = games.find(g=>g.board == jsonResp.board);
+      if( game ) {
+        game.name = jsonResp.name;
+        game.testedOK = true;        
+        setGames([...games]);   // Trigger list refresh
+        setTested(true);        // Update current game UI                      
+        console.log("Tested OK updated: ", jsonResp);
+      }
+      else  
+        console.log("Error - board not found", jsonResp);
+    }
+    else
+      console.log("Error encountered: ", jsonResp);
+  }
 
   return (
     <div 
@@ -225,39 +244,17 @@ function App() {
             />
 
             <button
-              onClick={()=>{                          
-                  console.log(boardString, name, games[selectedGameIdx as number].name); 
-                  sendPOSTRequest('api/sudoku/tested', 
-                    JSON.stringify({ board: boardString, name }),  
-                      (jsonResp: any, status: number) => {
-                        switch(status)
-                        {
-                          case StatusCodes.OK:
-                            const game = games.find(g=>g.board == jsonResp.board);
-                            if( game ) {
-                              game.name = jsonResp.name;
-                              game.testedOK = true;        
-                              setGames([...games]);   // Trigger list refresh
-                              setTested(true);        // Update current game UI                      
-                              console.log("Tested OK updated: ", jsonResp);
-                            }
-                            else  
-                              console.log("Error - board not found", jsonResp);
-                            break;
-                          default:
-                            console.log("Error encountered: ", jsonResp);
-                        }
-                      }
-                  );
+              onClick={ ()=>{                          
+                  console.log(boardString, name, games[selectedGameIdx as number].name);                   
+                  (async() => { // Async Immediately Invoked Function Expression (IIFE)
+                    const res = await setTestedOkAPI( boardString, name ); 
+                    handleTestedOK(res);
+                  })();
                 }
               }  
-            
             >Tested OK</button>
-
           </div>
           }
-
-
       </div>
       )}
       
@@ -291,7 +288,6 @@ function App() {
             if( !adminMode )
               setStartTimer(false); 
               setBoardsLoaded(false);
-              //sendGETRequest('api/sudoku/board', handleInit );
               doGetBoard();
             //setRestartTimerFlag(!restartTimerFlag);
           } }
