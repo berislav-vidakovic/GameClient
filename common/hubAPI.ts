@@ -1,12 +1,23 @@
 // hubAPI.ts
 
 // Implements the following Design patterns:
-// Facade → hubAPI.ts
-// Strategy → REST vs GraphQL selection
-// Adapter → Normalizing REST & GraphQL responses
+// Facade - provides a simplified interface to the client code
+//  -exposes a simplified API that  business logic can call without
+//   worrying about the underlying implementation details.
+//  -Hides complexity: The actual logic of deciding between REST and GraphQL, 
+//   and calling different modules (restAPIsend vs graphQL) is hidden from the caller
+//   The consumer just calls ...API() and gets the result
+
+// Strategy - REST vs GraphQL selection
+//  using apiOption to switch between REST and GraphQL
+//  the implementation (strategy) is selected at runtime
+
+// Adapter - Normalizing REST & GraphQL responses
+//  If REST and GraphQL would return different formats, 
+//  it can be normalized in these Facade functions before returning to the caller
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
-  logoutUserREST } from './restAPIsend';
+  logoutUserREST, loginUserREST } from './restAPIsend';
 import { queryGetAllUsers } from './graphQL';
 
 // Strategy pattern
@@ -43,4 +54,12 @@ export async function logoutUserAPI( userId : number) {
   //apiOption == 'REST'  
   return await logoutUserREST(userId);
 }
+
+export async function loginUserAPI(userId: number, password: string) {
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await loginUserREST(userId, password);
+}
+
 

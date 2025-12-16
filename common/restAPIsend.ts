@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 
 const GETusersEndpoint = 'api/users/all';
 //const POSTuserRegisterEndpoint = 'api/users/new';
-//const POSTuserLoginEndpoint = 'api/users/login';
+const POSTuserLoginEndpoint = 'api/users/login';
 const POSTloginRefreshEndpoint = 'api/auth/refresh';
 const POSTuserLogoutEndpoint = 'api/users/logout';
 //const POSTinviteEndpoint = 'api/invitations/invite';
@@ -51,6 +51,16 @@ export async function getLocalizationREST(){
 export async function logoutUserREST( userId: number){
   const body = JSON.stringify({ userId } );
   const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserLogoutEndpoint, body);
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+
+export async function loginUserREST(userId: number, password: string) {
+  const body = JSON.stringify({ userId, password } );
+  
+  const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserLoginEndpoint, body);
   if( resp.status == StatusCodes.OK )
     return resp.data;
   return null;

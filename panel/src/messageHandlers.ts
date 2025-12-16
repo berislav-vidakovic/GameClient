@@ -73,11 +73,11 @@ export const handleResponseSignUp = ( jsonResp: any, status: number ) => {
   }
 }
 
-export function handleUserLogin( jsonResp: any, status: number ){
+export function handleUserLogin( jsonResp: any ){
   // Response: { userId, isOnline, accessToken, refreshToken }
   console.log("******** ****** POST response handleUserLogin received: ", 
-      jsonResp, "Status: ", status); 
-  if( status == StatusCodes.OK ){
+      jsonResp); 
+  if( jsonResp  ){
     setCurrentUserIdRef(Number(jsonResp.userId));
     sessionStorage.setItem("accessToken", jsonResp.accessToken);
     sessionStorage.setItem("refreshToken", jsonResp.refreshToken);

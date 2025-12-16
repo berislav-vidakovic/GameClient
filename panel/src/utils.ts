@@ -1,11 +1,11 @@
 import { sendPOSTRequest } from '@common/restAPI';
-import { getAllUsersAPI, refreshLoginAPI, logoutUserAPI } from '@common/hubAPI';
+import { getAllUsersAPI, refreshLoginAPI, logoutUserAPI,
+  loginUserAPI } from '@common/hubAPI';
 
 import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
   handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
 
 const POSTuserRegisterEndpoint = 'api/users/new';
-const POSTuserLoginEndpoint = 'api/users/login';
 const POSTinviteEndpoint = 'api/invitations/invite';
 const POSTcancelEndpoint = 'api/invitations/cancel';
 const POSTacceptEndpoint = 'api/invitations/accept';
@@ -30,6 +30,12 @@ export async function logoutUser(userId: number) {
   handleUserLogout( jsonResp );
 }
 
+export async function loginUser(userId: number, password: string) {
+  const jsonResp = await loginUserAPI(userId, password);
+  handleUserLogin( jsonResp );  
+}
+
+
 /// Refactoring from callback to async/await design ----------------------------------
 
 export async function registerUser(login: string, fullname: string, password: string) {
@@ -38,14 +44,6 @@ export async function registerUser(login: string, fullname: string, password: st
   sendPOSTRequest(POSTuserRegisterEndpoint, body, handleResponseSignUp);
   //console.log("POST sending: ", body );
 }
-
-export async function loginUser(userId: number, password: string) {
-  const body = JSON.stringify({ userId, password } );
-  
-  sendPOSTRequest(POSTuserLoginEndpoint, body, handleUserLogin);
-  console.log("POST sending: ", body );
-}
-
 
 // -> Request { callerId, calleeId, selectedGame }  
 // Response { "invitation": "send" | "cancel" | "accept" | "reject", callerId, calleeId, selectedGame }
