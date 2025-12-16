@@ -45,7 +45,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan barryonweb.com >> ~/.ssh/known_hosts
+          ssh-keyscan -p 2222 barryonweb.com >> ~/.ssh/known_hosts
       
       # Nginx config - transfer, enable, check syntax and restart Nginx
       - name: Update Nginx config
