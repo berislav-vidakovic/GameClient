@@ -51,7 +51,7 @@ jobs:
       - name: Update Nginx config
         run: |
           ssh -p 2222 barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
-          scp gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
+          scp -P 2222 gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
           ssh -p 2222 barry75@barryonweb.com "
             sudo cp /var/www/games/nginx/gamesjclient.barryonweb.com /etc/nginx/sites-available/ &&
             sudo ln -sf /etc/nginx/sites-available/gamesjclient.barryonweb.com /etc/nginx/sites-enabled/ &&
