@@ -1,8 +1,9 @@
 import { sendPOSTRequest, sendPOSTRequestAsync, type ApiResponse } from '@common/restAPI';
-import { getAllUsersAPI } from '@common/hubAPI';
+import { getAllUsersAPI, refreshLoginAPI } from '@common/hubAPI';
 
 import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
   handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
+import { StatusCodes } from 'http-status-codes';
 
 const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTuserLoginEndpoint = 'api/users/login';
@@ -22,18 +23,9 @@ export async function getAllUsers() {
     console.error("Error fetching all users. No data received." );
 }
 
-export async function loginRefresh(handleLoginRefresh: (data: any, status: number) => void) {
-  
-  
-  const refreshToken = sessionStorage.getItem("refreshToken");
-  const body = JSON.stringify({ refreshToken } );
-  
-  // sendPOSTRequest(POSTloginRefreshEndpoint, body, handleLoginRefresh );
-  
-  // awaitable version
-  const resp : ApiResponse = await sendPOSTRequestAsync(POSTloginRefreshEndpoint, body );
-  handleLoginRefresh( resp.data, resp.status );
-  console.log("POST sending: ", body );
+export async function loginRefresh(handleLoginRefresh: (data: any) => void) {  
+  const jsonResp: string = await refreshLoginAPI();
+  handleLoginRefresh( jsonResp);  
 }
 
 export async function registerUser(login: string, fullname: string, password: string) {

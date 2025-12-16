@@ -1,11 +1,11 @@
-import { sendGETRequestAsync } from './restAPI';
+import { sendGETRequestAsync, sendPOSTRequestAsync } from './restAPI';
 import type { ApiResponse } from './restAPI';
 import { StatusCodes } from 'http-status-codes';
 
 const GETusersEndpoint = 'api/users/all';
 //const POSTuserRegisterEndpoint = 'api/users/new';
 //const POSTuserLoginEndpoint = 'api/users/login';
-//const POSTloginRefreshEndpoint = 'api/auth/refresh';
+const POSTloginRefreshEndpoint = 'api/auth/refresh';
 //const POSTuserLogoutEndpoint = 'api/users/logout';
 //const POSTinviteEndpoint = 'api/invitations/invite';
 //const POSTcancelEndpoint = 'api/invitations/cancel';
@@ -24,4 +24,18 @@ export async function getAllUsersREST() {
 
   // Adapter pattern - normalize responses
   return jsonResp;
+}
+
+export async function refreshLoginREST(){
+  const refreshToken = sessionStorage.getItem("refreshToken");
+  const body = JSON.stringify({ refreshToken } );
+  
+  // sendPOSTRequest(POSTloginRefreshEndpoint, body, handleLoginRefresh );
+  console.log("POST sending: ", body );
+  
+  const resp : ApiResponse = await sendPOSTRequestAsync(POSTloginRefreshEndpoint, body );
+  if( resp.status != StatusCodes.OK )
+    return null;
+
+  return resp.data;
 }

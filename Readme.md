@@ -188,6 +188,59 @@
             scp -r connect4/dist/* barry75@barryonweb.com:/var/www/games/frontend/connect4/
   ```
 
+- Change  SSH port from default 22 to 2222
+  - Check configured listening Port
+    ```bash
+    sudo grep -R "^Port" /etc/ssh
+    [sudo] password for barry75:
+    /etc/ssh/sshd_config:Port 2222
+    ```
+
+  - Check what port is actually listening
+    ```bash
+    sudo ss -tlnp | grep ssh
+    LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=777577,fd=3),("systemd",pid=1,fd=125))                                                         
+    LISTEN 0      4096            [::]:22            [::]:*    users:(("sshd",pid=777577,fd=4),("systemd",pid=1,fd=129))   
+    ```
+
+  - Disable ssh.socket (overrides Port configured) and verify status
+    ```bash
+    sudo systemctl disable --now ssh.socket
+    Removed "/etc/systemd/system/sockets.target.wants/ssh.socket".
+    Removed "/etc/systemd/system/ssh.service.requires/ssh.socket".
+    barry75@vps1:~$ sudo systemctl status ssh.socket
+    ```
+
+  - Restart SSH service and check actual port listening
+    ```bash
+    sudo systemctl restart ssh
+    barry75@vps1:~$ sudo ss -tlnp | grep ssh
+    LISTEN 0      128          0.0.0.0:2222       0.0.0.0:*    users:(("sshd",pid=777974,fd=3))                                                                                  
+    LISTEN 0      128             [::]:2222          [::]:*    users:(("sshd",pid=777974,fd=4))     
+    ```
+  
+  - Connect to server with new Port
+    ```bash
+    ssh -p 2222 barry75@barryonweb.com
+    ```
+  
+  - Update yaml with new port
+    ```yaml
+    ssh-keyscan -p 2222
+    ssh -p 2222
+    scp -P 2222
+    rsync -az -e "ssh -p 2222"
+    ```
+  
+  - Disable password authentication and root login
+    ```bash
+    sudo nano /etc/ssh/sshd_config
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    PermitRootLogin no
+    sudo systemctl restart ssh
+    ```
+
 ### 5. Troubleshooting 
 
 1. Check Nginx health & config

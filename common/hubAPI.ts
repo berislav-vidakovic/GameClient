@@ -5,9 +5,8 @@
 // Strategy → REST vs GraphQL selection
 // Adapter → Normalizing REST & GraphQL responses
 
-import { getAllUsersREST } from './restAPIsend';
+import { getAllUsersREST, refreshLoginREST } from './restAPIsend';
 import { queryGetAllUsers } from './graphQL';
-
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';
@@ -23,4 +22,9 @@ export async function getAllUsersAPI() {
   return await getAllUsersREST();
 }
 
-
+export async function refreshLoginAPI() {
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await refreshLoginREST();
+}

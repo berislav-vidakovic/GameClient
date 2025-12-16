@@ -78,9 +78,9 @@ function App() {
    }      
   }, [isWsConnected]);
 
-  const handleLoginRefresh = ( jsonResp: any, status: number) => {
+  const handleLoginRefresh = ( jsonResp: any) => {
     // Response { accessToken, refreshToken, userId }
-    if( status == StatusCodes.OK ) {
+    if( jsonResp ) {
       sessionStorage.setItem("accessToken", jsonResp.accessToken );
       sessionStorage.setItem("refreshToken", jsonResp.refreshToken );
       setCurrentUserId( jsonResp.userId );
@@ -90,7 +90,7 @@ function App() {
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("refreshToken");
       setCurrentUserId(null);
-      console.log("Refresh token invalid, Status Recived:", status, " Autologin=", autoLoginRef.current );     
+      console.log("Refresh token invalid,  Autologin=", autoLoginRef.current );     
       if( !autoLoginRef.current )
         setShowLoginDialog(true);
       console.log("...Auto Login");
