@@ -14,15 +14,16 @@ const POSTuserLogoutEndpoint = 'api/users/logout';
 //const POSTrunGame = 'api/games/run';
 const GETlocalizationEnpoint = 'api/localization/get';
 
+const GETsudokuBoardsEnpoint = 'api/sudoku/board';
+
+// PANEL client API functions ----------------------------------------------
 export async function getAllUsersREST() {
   let jsonResp: string = "";
-  //sendGETRequest(GETusersEndpoint, handleResponseGetAllUsers);
   const apiResp : ApiResponse = await sendGETRequestAsync(GETusersEndpoint);
   if( apiResp.status == StatusCodes.OK )
     jsonResp = apiResp.data;
   else
     console.error("Error fetching all users. STATUS: ", apiResp.status );
-
   // Adapter pattern - normalize responses
   return jsonResp;
 }
@@ -30,14 +31,10 @@ export async function getAllUsersREST() {
 export async function refreshLoginREST(){
   const refreshToken = sessionStorage.getItem("refreshToken");
   const body = JSON.stringify({ refreshToken } );
-  
-  // sendPOSTRequest(POSTloginRefreshEndpoint, body, handleLoginRefresh );
   console.log("POST sending: ", body );
-  
   const resp : ApiResponse = await sendPOSTRequestAsync(POSTloginRefreshEndpoint, body );
   if( resp.status != StatusCodes.OK )
     return null;
-
   return resp.data;
 }
 
@@ -56,22 +53,29 @@ export async function logoutUserREST( userId: number){
   return null;
 }
 
-
 export async function loginUserREST(userId: number, password: string) {
   const body = JSON.stringify({ userId, password } );
-  
   const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserLoginEndpoint, body);
   if( resp.status == StatusCodes.OK )
     return resp.data;
   return null;
 }
 
-
 export async function registerUserREST(login: string, fullname: string, password: string) {
   const body = JSON.stringify({ register: { login, fullname, password } } );
   const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserRegisterEndpoint, body);
-  console.log("REg Response: ", resp.data);
   if( resp.status == StatusCodes.OK || resp.status == StatusCodes.CREATED )
     return resp.data;
   return null;
 }
+
+// SUDOKU game API functions ----------------------------------------------
+export async function getSudokuBoardsREST(){
+  const resp:ApiResponse = await sendGETRequestAsync( GETsudokuBoardsEnpoint );
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+// CONNECT4 game API functions --------------------------------------------
+

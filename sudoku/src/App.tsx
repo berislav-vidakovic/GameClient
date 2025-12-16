@@ -1,6 +1,7 @@
 // App.tsx
 import Board from "./Board";
-import { sendGETRequest, sendPOSTRequest } from '@common/restAPI';
+import { sendPOSTRequest } from '@common/restAPI';
+import { getSudokuBoardsAPI } from '@common/hubAPI';
 import { loadCommonConfig } from '@common/config';
 import { useEffect, useState } from "react";
 import { StatusCodes } from "http-status-codes";
@@ -17,21 +18,33 @@ function App() {
   const [selectedGameIdx, setSelectedGameIdx] = useState<number | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const [startTimer, setStartTimer] = useState(false);  
-
   
   useEffect( () => { 
     loadCommonConfig(setConfigLoaded);     
     const params = new URLSearchParams(window.location.search);
     console.log( "Params: userId=", params.get('userId') );
-
-    
-
   }, []);
 
-   useEffect( () => { if( isConfigLoaded){
-      sendGETRequest('api/sudoku/board', handleInit );
-   }      
+  const doGetBoard = async() => {
+    const res = await getSudokuBoardsAPI(); 
+    handleInit(res);
+  }
+
+  useEffect( () => { if( isConfigLoaded){      
+      doGetBoard();
+    }
   }, [isConfigLoaded]);
+
+  /*
+    useEffect( () => { if( isConfigLoaded){      
+      (async() => {
+        const res = await getSudokuBoardsAPI(); 
+        handleInit(res);
+      })();
+    }
+  }, [isConfigLoaded]);
+  */
+  
 
   interface Game {
     board: string,
@@ -43,7 +56,8 @@ function App() {
 
   const handleInit = ( jsonResp: any ) => {    
     console.log("Boards  : ", jsonResp );
-    //return;
+    if( !jsonResp )
+      return;
     sessionStorage.setItem("myID", jsonResp.clientId );
     if( jsonResp.boards.length ){
       const games : Game[] = [];
@@ -277,8 +291,8 @@ function App() {
             if( !adminMode )
               setStartTimer(false); 
               setBoardsLoaded(false);
-              sendGETRequest('api/sudoku/board', handleInit );
-
+              //sendGETRequest('api/sudoku/board', handleInit );
+              doGetBoard();
             //setRestartTimerFlag(!restartTimerFlag);
           } }
         >
