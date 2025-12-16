@@ -50,9 +50,9 @@ jobs:
       # Nginx config - transfer, enable, check syntax and restart Nginx
       - name: Update Nginx config
         run: |
-          ssh barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
+          ssh -p 2222 barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
           scp gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
-          ssh barry75@barryonweb.com "
+          ssh -p 2222 barry75@barryonweb.com "
             sudo cp /var/www/games/nginx/gamesjclient.barryonweb.com /etc/nginx/sites-available/ &&
             sudo ln -sf /etc/nginx/sites-available/gamesjclient.barryonweb.com /etc/nginx/sites-enabled/ &&
             sudo nginx -t &&
@@ -62,7 +62,7 @@ jobs:
       # Transfer frontend from GitHub Repo to Ubuntu server via SCP
       - name: Deploy frontend via SSH to server
         run: |
-          rsync -az panel/dist/ barry75@barryonweb.com:/var/www/games/frontend/panel/
-          rsync -az sudoku/dist/ barry75@barryonweb.com:/var/www/games/frontend/sudoku/
-          rsync -az connect4/dist/ barry75@barryonweb.com:/var/www/games/frontend/connect4/
+          rsync -az -e "ssh -p 2222" panel/dist/ barry75@barryonweb.com:/var/www/games/frontend/panel/
+          rsync -az -e "ssh -p 2222" sudoku/dist/ barry75@barryonweb.com:/var/www/games/frontend/sudoku/
+          rsync -az -e "ssh -p 2222" connect4/dist/ barry75@barryonweb.com:/var/www/games/frontend/connect4/
 
