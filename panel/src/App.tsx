@@ -59,9 +59,8 @@ function App() {
       setInvitationState, setSelectedGame, setTechStack );      
     
     getAllUsers(); // calls setInitialized in response handler
-    getLocalization().then(() => {
-      setLocalesLoaded(true); // mark locales as loaded
-    });
+    getLocalization();
+    setLocalesLoaded(true); // mark locales as loaded
    }      
   }, [isConfigLoaded]); 
 

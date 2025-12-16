@@ -12,6 +12,7 @@ const POSTloginRefreshEndpoint = 'api/auth/refresh';
 //const POSTacceptEndpoint = 'api/invitations/accept';
 //const POSTrejectEndpoint = 'api/invitations/reject';
 //const POSTrunGame = 'api/games/run';
+const GETlocalizationEnpoint = 'api/localization/get';
 
 export async function getAllUsersREST() {
   let jsonResp: string = "";
@@ -38,4 +39,11 @@ export async function refreshLoginREST(){
     return null;
 
   return resp.data;
+}
+
+export async function getLocalizationREST(){
+  const resp:ApiResponse = await sendGETRequestAsync(GETlocalizationEnpoint);
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
 }

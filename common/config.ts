@@ -3,7 +3,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { sendGETRequest } from './restAPI';
 import { queryPingDb } from './graphQL';
-import { setApiOption } from './hubAPI';
+import { getLocalizationAPI, setApiOption } from './hubAPI';
 
 import type { Locales } from './interfaces';
 
@@ -72,18 +72,8 @@ export async function loadCommonConfig(
   setConfigLoaded(true);
 }
 
-
-
-export async function getLocalization(): Promise<void> {
-  return new Promise((resolve) => {
-    sendGETRequest('api/localization/get', (jsonResp: any) => {
-      handleGetLocalization(jsonResp);
-      resolve(); // resolve the promise once locales are loaded
-    });
-  });
-}
-
-export  const handleGetLocalization = ( jsonResp: any ) => {    
+export async function getLocalization() {
+  const jsonResp = await getLocalizationAPI();
   //console.log("Resp GET Locales:", jsonResp)
   locales = jsonResp.locales.map( (l: any) => ({
     paramKey: l.paramKey,
@@ -91,4 +81,4 @@ export  const handleGetLocalization = ( jsonResp: any ) => {
     language: l.language
   }) );
   //console.log("Locales stored:", locales);
-}
+} 
