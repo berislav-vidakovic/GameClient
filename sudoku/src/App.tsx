@@ -17,11 +17,10 @@ function App() {
   const [selectedGameIdx, setSelectedGameIdx] = useState<number | null>(null);
   const [games, setGames] = useState<Game[]>([]);
   const [startTimer, setStartTimer] = useState(false);  
-  const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
 
   
   useEffect( () => { 
-    loadCommonConfig(setConfigLoaded, setApiDesign);     
+    loadCommonConfig(setConfigLoaded);     
     const params = new URLSearchParams(window.location.search);
     console.log( "Params: userId=", params.get('userId') );
 
@@ -30,7 +29,6 @@ function App() {
   }, []);
 
    useEffect( () => { if( isConfigLoaded){
-      console.log("API Design option: ", apiDesign);
       sendGETRequest('api/sudoku/board', handleInit );
    }      
   }, [isConfigLoaded]);
