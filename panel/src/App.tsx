@@ -20,7 +20,6 @@ import { getAllUsers, logoutUser, inviteUser, runGame, loginRefresh } from './ut
 import RegisterDialog from './components/RegisterDialog.tsx' 
 import LoginDialog from './components/LoginDialog.tsx' 
 import InviteDialog from './components/InviteDialog.tsx' 
-import { StatusCodes } from 'http-status-codes';
 
 
 function App() {

@@ -1,13 +1,11 @@
-import { sendPOSTRequest, sendPOSTRequestAsync, type ApiResponse } from '@common/restAPI';
+import { sendPOSTRequest } from '@common/restAPI';
 import { getAllUsersAPI, refreshLoginAPI } from '@common/hubAPI';
 
 import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
   handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
-import { StatusCodes } from 'http-status-codes';
 
 const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTuserLoginEndpoint = 'api/users/login';
-const POSTloginRefreshEndpoint = 'api/auth/refresh';
 const POSTuserLogoutEndpoint = 'api/users/logout';
 const POSTinviteEndpoint = 'api/invitations/invite';
 const POSTcancelEndpoint = 'api/invitations/cancel';
