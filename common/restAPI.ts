@@ -52,7 +52,11 @@ export async function sendPOSTRequestAsync(
   msgBody: string
 ): Promise<ApiResponse> {
 
-  const response = await fetch(`${URL_BACKEND_HTTP}/${endpoint}`, {
+  const postUrl =
+    `${URL_BACKEND_HTTP}/${endpoint}` +
+    `?id=${sessionStorage.getItem("myID")}`;
+
+  const response = await fetch(postUrl, {
     method: "POST",
     headers: {
       "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),

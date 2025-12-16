@@ -22,7 +22,6 @@ import LoginDialog from './components/LoginDialog.tsx'
 import InviteDialog from './components/InviteDialog.tsx' 
 import { StatusCodes } from 'http-status-codes';
 
-export let apiOption: 'REST' | 'GraphQL' = 'REST';
 
 function App() {
   const [currentLang, setCurrentLangState] = useState<'en' | 'de' | 'hr' | null>(null);
@@ -44,7 +43,6 @@ function App() {
   const [techStack, setTechStack] = useState<string[]>([]);
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
   const autoLoginRef = useRef(autoLogin);
-  const [apiDesign, setApiDesign] = useState<'REST' | 'GraphQL'>('REST');
 
   
   useEffect(() => { // React ref is synchronous and always holds the latest value
@@ -52,12 +50,10 @@ function App() {
   }, [autoLogin]);
 
   useEffect( () => { 
-    loadCommonConfig(setConfigLoaded, setApiDesign);     
+    loadCommonConfig(setConfigLoaded);     
   }, []);
 
   useEffect( () => { if( isConfigLoaded){
-    console.log("API Design option: ", apiDesign);
-    apiOption = apiDesign;
 
     setStateFunctionRefs(setInitialized, setUsersRegistered, 
       setCurrentUserId, setOnlineUsers, setCallerUserId, setCalleeUserId,

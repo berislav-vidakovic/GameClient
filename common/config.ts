@@ -3,6 +3,8 @@
 import type { Dispatch, SetStateAction } from "react";
 import { sendGETRequest } from './restAPI';
 import { queryPingDb } from './graphQL';
+import { setApiOption } from './hubAPI';
+
 import type { Locales } from './interfaces';
 
 export let URL_BACKEND_HTTP = '';
@@ -31,9 +33,7 @@ export const getTitle = (paramKey: string, lang: 'en' | 'de' | 'hr' | null = nul
 }
 
 export async function loadCommonConfig(
-  setConfigLoaded:  Dispatch<SetStateAction<boolean>>,
-  setApiDesign:  Dispatch<SetStateAction<'REST' | 'GraphQL'>>
-  
+  setConfigLoaded:  Dispatch<SetStateAction<boolean>>  
 ): Promise<void> {
   const currentEnv = detectEnv();
   const response = await fetch('clientsettings.json');
@@ -45,8 +45,8 @@ export async function loadCommonConfig(
   console.log(`Loaded environment: ${currentEnv}`);
   
   let backend = 'backendJavaMySQL';  
-  //setApiDesign("REST");
-  setApiDesign("GraphQL");
+  setApiOption("REST");
+  //setApiOption("GraphQL");
 
   URL_BACKEND_HTTP = config.urlBackend[backend][currentEnv].HTTP;
   URL_BACKEND_WS = config.urlBackend[backend][currentEnv].WS;
@@ -65,7 +65,7 @@ export async function loadCommonConfig(
   }
 
   // GraphQL test
-  await queryPingDb();
+  //await queryPingDb();
 
   setConfigLoaded(true);
 }

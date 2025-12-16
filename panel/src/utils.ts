@@ -1,9 +1,8 @@
-import { sendPOSTRequest } from '@common/restAPI';
+import { sendPOSTRequest, sendPOSTRequestAsync, type ApiResponse } from '@common/restAPI';
 import { getAllUsersAPI } from '@common/hubAPI';
 
 import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
   handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
-import { apiOption } from './App';
 
 const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTuserLoginEndpoint = 'api/users/login';
@@ -16,13 +15,26 @@ const POSTrejectEndpoint = 'api/invitations/reject';
 const POSTrunGame = 'api/games/run';
 
 export async function getAllUsers() {  
-  const jsonResp: string = await getAllUsersAPI( apiOption );
+  const jsonResp: string = await getAllUsersAPI();
   if( jsonResp )
     handleResponseGetAllUsers( jsonResp );    
   else
     console.error("Error fetching all users. No data received." );
 }
 
+export async function loginRefresh(handleLoginRefresh: (data: any, status: number) => void) {
+  
+  
+  const refreshToken = sessionStorage.getItem("refreshToken");
+  const body = JSON.stringify({ refreshToken } );
+  
+  // sendPOSTRequest(POSTloginRefreshEndpoint, body, handleLoginRefresh );
+  
+  // awaitable version
+  const resp : ApiResponse = await sendPOSTRequestAsync(POSTloginRefreshEndpoint, body );
+  handleLoginRefresh( resp.data, resp.status );
+  console.log("POST sending: ", body );
+}
 
 export async function registerUser(login: string, fullname: string, password: string) {
   const body = JSON.stringify({ register: { login, fullname, password } } );
@@ -35,14 +47,6 @@ export async function loginUser(userId: number, password: string) {
   const body = JSON.stringify({ userId, password } );
   
   sendPOSTRequest(POSTuserLoginEndpoint, body, handleUserLogin);
-  console.log("POST sending: ", body );
-}
-
-export function loginRefresh(handleLoginRefresh: (data: any, status: number) => void) {
-  const refreshToken = sessionStorage.getItem("refreshToken");
-  const body = JSON.stringify({ refreshToken } );
-  
-  sendPOSTRequest(POSTloginRefreshEndpoint, body, handleLoginRefresh );
   console.log("POST sending: ", body );
 }
 
