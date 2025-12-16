@@ -14,6 +14,8 @@ export let URL_SUDOKU = '';
 export let URL_CONNECT4 = '';
 export let URL_MEMORY = '';
 
+const apiDesign : 'REST' | 'GraphQL' = 'REST';  
+
 let locales: Locales[] = [];
 
 function detectEnv(): 'Development' | 'Production' {
@@ -45,8 +47,7 @@ export async function loadCommonConfig(
   console.log(`Loaded environment: ${currentEnv}`);
   
   let backend = 'backendJavaMySQL';  
-  setApiOption("REST");
-  //setApiOption("GraphQL");
+  setApiOption(apiDesign);
 
   URL_BACKEND_HTTP = config.urlBackend[backend][currentEnv].HTTP;
   URL_BACKEND_WS = config.urlBackend[backend][currentEnv].WS;
@@ -65,7 +66,8 @@ export async function loadCommonConfig(
   }
 
   // GraphQL test
-  //await queryPingDb();
+  if( apiDesign == 'GraphQL' )
+    await queryPingDb();
 
   setConfigLoaded(true);
 }
