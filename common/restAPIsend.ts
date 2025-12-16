@@ -6,7 +6,7 @@ const GETusersEndpoint = 'api/users/all';
 //const POSTuserRegisterEndpoint = 'api/users/new';
 //const POSTuserLoginEndpoint = 'api/users/login';
 const POSTloginRefreshEndpoint = 'api/auth/refresh';
-//const POSTuserLogoutEndpoint = 'api/users/logout';
+const POSTuserLogoutEndpoint = 'api/users/logout';
 //const POSTinviteEndpoint = 'api/invitations/invite';
 //const POSTcancelEndpoint = 'api/invitations/cancel';
 //const POSTacceptEndpoint = 'api/invitations/accept';
@@ -43,6 +43,14 @@ export async function refreshLoginREST(){
 
 export async function getLocalizationREST(){
   const resp:ApiResponse = await sendGETRequestAsync(GETlocalizationEnpoint);
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+export async function logoutUserREST( userId: number){
+  const body = JSON.stringify({ userId } );
+  const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserLogoutEndpoint, body);
   if( resp.status == StatusCodes.OK )
     return resp.data;
   return null;

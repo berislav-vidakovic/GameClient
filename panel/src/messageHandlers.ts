@@ -87,10 +87,10 @@ export function handleUserLogin( jsonResp: any, status: number ){
 }
 
 
-export function handleUserLogout( jsonResp: any, status: number ){
+export function handleUserLogout( jsonResp: any ){
   console.log("Logout POST response received: ", jsonResp); 
   //var response = new { userId, isOnline = false };  
-  if( status == StatusCodes.OK ) {
+  if( jsonResp ) {
     setCurrentUserIdRef(null);
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
