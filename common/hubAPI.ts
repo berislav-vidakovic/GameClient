@@ -17,7 +17,7 @@
 //  it can be normalized in these Facade functions before returning to the caller
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
-  logoutUserREST, loginUserREST } from './restAPIsend';
+  logoutUserREST, loginUserREST, registerUserREST } from './restAPIsend';
 import { queryGetAllUsers } from './graphQL';
 
 // Strategy pattern
@@ -62,4 +62,10 @@ export async function loginUserAPI(userId: number, password: string) {
   return await loginUserREST(userId, password);
 }
 
+export async function registerUserAPI(login: string, fullname: string, password: string) {
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await registerUserREST(login, fullname, password);
+}
 

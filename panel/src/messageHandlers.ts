@@ -62,9 +62,9 @@ export  const handleResponseGetAllUsers = ( jsonResp: any ) => {
   console.log("Tech stack:", jsonResp.techstack);
 }
 
-export const handleResponseSignUp = ( jsonResp: any, status: number ) => {    
-  console.log("*** HANDLE User registered: ", jsonResp, "Status: ", status);
-  if( jsonResp.acknowledged ) {     
+export const handleResponseSignUp = ( jsonResp: any ) => {    
+  console.log("*** HANDLE User registered: ", jsonResp );
+  if( jsonResp && jsonResp.acknowledged ) {     
     console.log("User registered: ", jsonResp.user);
   }
   else {

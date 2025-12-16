@@ -1,11 +1,10 @@
 import { sendPOSTRequest } from '@common/restAPI';
 import { getAllUsersAPI, refreshLoginAPI, logoutUserAPI,
-  loginUserAPI } from '@common/hubAPI';
+  loginUserAPI, registerUserAPI } from '@common/hubAPI';
 
 import { handleResponseSignUp, handleUserLogin, handleUserLogout, 
   handleInvite, handleResponseRunGame, handleResponseGetAllUsers } from './messageHandlers';
 
-const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTinviteEndpoint = 'api/invitations/invite';
 const POSTcancelEndpoint = 'api/invitations/cancel';
 const POSTacceptEndpoint = 'api/invitations/accept';
@@ -36,14 +35,23 @@ export async function loginUser(userId: number, password: string) {
 }
 
 
-/// Refactoring from callback to async/await design ----------------------------------
+export async function registerUser(login: string, fullname: string, password: string) {
+  const jsonResp = await registerUserAPI(login, fullname, password);
+  handleResponseSignUp( jsonResp );
+}
 
+
+/*
 export async function registerUser(login: string, fullname: string, password: string) {
   const body = JSON.stringify({ register: { login, fullname, password } } );
   //{ register: { login, fullname } 
   sendPOSTRequest(POSTuserRegisterEndpoint, body, handleResponseSignUp);
   //console.log("POST sending: ", body );
 }
+*/
+
+/// Refactoring from callback to async/await design ----------------------------------
+
 
 // -> Request { callerId, calleeId, selectedGame }  
 // Response { "invitation": "send" | "cancel" | "accept" | "reject", callerId, calleeId, selectedGame }

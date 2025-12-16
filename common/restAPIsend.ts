@@ -3,7 +3,7 @@ import type { ApiResponse } from './restAPI';
 import { StatusCodes } from 'http-status-codes';
 
 const GETusersEndpoint = 'api/users/all';
-//const POSTuserRegisterEndpoint = 'api/users/new';
+const POSTuserRegisterEndpoint = 'api/users/new';
 const POSTuserLoginEndpoint = 'api/users/login';
 const POSTloginRefreshEndpoint = 'api/auth/refresh';
 const POSTuserLogoutEndpoint = 'api/users/logout';
@@ -62,6 +62,16 @@ export async function loginUserREST(userId: number, password: string) {
   
   const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserLoginEndpoint, body);
   if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+
+export async function registerUserREST(login: string, fullname: string, password: string) {
+  const body = JSON.stringify({ register: { login, fullname, password } } );
+  const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserRegisterEndpoint, body);
+  console.log("REg Response: ", resp.data);
+  if( resp.status == StatusCodes.OK || resp.status == StatusCodes.CREATED )
     return resp.data;
   return null;
 }
