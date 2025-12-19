@@ -1,7 +1,7 @@
 // common/config.ts
 
 import type { Dispatch, SetStateAction } from "react";
-import { queryPingDb } from './graphQL';
+import { queryPing, queryPingDb } from './graphQL';
 import { getLocalizationAPI, setApiOption } from './hubAPI';
 
 import type { Locales } from './interfaces';
@@ -64,9 +64,9 @@ export async function loadCommonConfig(
     URL_MEMORY = config.urlFrontend[currentEnv][backend].memory;
   }
 
-  // GraphQL test
-  if( apiDesign == 'GraphQL' )
-    await queryPingDb();
+  // GraphQL healthcheck 
+  await queryPing();
+  await queryPingDb();
 
   setConfigLoaded(true);
 }
