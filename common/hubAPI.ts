@@ -17,9 +17,9 @@
 //  it can be normalized in these Facade functions before returning to the caller
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
-  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
+  logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
   setTestedOkREST } from './restAPIsend';
-import { queryGetAllUsers, mutationRegisterUser } from './graphQL';
+import { /*queryGetAllUsers,*/ mutationRegisterUser } from './graphQL';
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';

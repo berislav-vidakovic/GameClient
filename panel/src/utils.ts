@@ -39,7 +39,7 @@ export async function registerUser(login: string, fullname: string, password: st
   const jsonResp = await registerUserAPI(login, fullname, password);
   
   console.log("Register User Response: ", jsonResp );
-  //handleResponseSignUp( jsonResp );
+  handleResponseSignUp( jsonResp );
 }
 
 

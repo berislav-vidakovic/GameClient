@@ -344,14 +344,8 @@ This is common codebase, with runtime configuration-based switch to one of the f
 
 - Send mutation 
   ```ts
-  
+  export async function mutationRegisterUser(input: RegisterUserInput): Promise<RegisterUserResponse> {
+  const body = JSON.stringify({
+    query: `
+      mutation ...
   ```
-
-- Add support for subscriptions
-
-  ```bash
-  npm install graphql-ws
-  ```
-
-  - Add graphqlWebSocket.ts
-  - Subscripbe from panel/App.tsx
