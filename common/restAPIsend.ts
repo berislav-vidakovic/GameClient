@@ -27,6 +27,8 @@ export async function getAllUsersREST() {
   else
     console.error("Error fetching all users. STATUS: ", apiResp.status );
   // Adapter pattern - normalize responses
+  console.log("getAllUsers Reponse: ", jsonResp );
+
   return jsonResp;
 }
 

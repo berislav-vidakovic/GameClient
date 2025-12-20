@@ -40,6 +40,7 @@ export function setStateFunctionRefs(
 
 export  const handleResponseGetAllUsers = ( jsonResp: any ) => {    
   // Map API response fields to match your User interface
+  console.log("handleResponseGetAllUsers:", jsonResp.users)
   const mappedUsers: User[] = jsonResp.users.map((u: any) => ({
     userId: u.userId,
     login: u.login,

@@ -14,6 +14,7 @@ import { URL_MEMORY, URL_SUDOKU } from '@common/config';
 import { loadCommonConfig, getTitle, getLocalization } from '@common/config';
 import { useState, useEffect, useRef } from 'react';
 import { connectWS } from '@common/webSocket';
+import { subscribeUserRegistered } from '@common/graphQLwebSocket.ts';
 import type { User } from '@common/interfaces';
 import { setStateFunctionRefs, handleWsMessage } from './messageHandlers';
 import { getAllUsers, logoutUser, inviteUser, runGame, loginRefresh } from './utils';
@@ -68,6 +69,17 @@ function App() {
       connectWS( setWsConnected, handleWsMessage );
    }      
   }, [isConfigLoaded, isInitialized]);
+
+/*
+  // Subscribe to GraphQL WebSocket for new user registrations  
+  useEffect(() => {
+    const unsubscribe = subscribeUserRegistered(user => {
+      console.log("New user:", user);
+    });
+
+    return () => unsubscribe();
+  }, []); 
+*/
 
   useEffect( () => { if( isWsConnected ){
     setAutoLogin(true);

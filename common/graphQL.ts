@@ -45,3 +45,57 @@ export async function queryGetAllUsers(){
   return json.data.getAllUsers;
 }
 
+// GraphQL mutation
+export interface RegisterUserInput {
+  login: string;
+  fullName: string;
+  password: string;
+}
+
+export interface RegisterUserResponse {
+  acknowledged: boolean;
+  error?: string;
+  user?: {
+    userId: string;
+    login: string;
+    fullName: string;
+  };
+}
+
+export async function mutationRegisterUser(input: RegisterUserInput): Promise<RegisterUserResponse> {
+  const body = JSON.stringify({
+    query: `
+      mutation RegisterUser($input: RegisterUserInput!) {
+        registerUser(input: $input) {
+          acknowledged
+          error
+          user {
+            userId
+            login
+            fullName
+          }
+        }
+      }
+    `,
+    variables: {
+      input
+    }
+  });
+
+  console.log("*** Sending GraphQL mutation mutationRegisterUser with body:", body);
+  const res = await fetch(getGraphQLurl(), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body
+  });
+
+  const json = await res.json();
+  console.log("*** Received GraphQL mutation response ", json);
+
+  console.log("GraphQL registerUser response:", json);
+
+  // GraphQL always wraps data in 'data'
+  return json.data.registerUser;
+}

@@ -19,7 +19,7 @@
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
   logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
   setTestedOkREST } from './restAPIsend';
-import { queryGetAllUsers } from './graphQL';
+import { queryGetAllUsers, mutationRegisterUser } from './graphQL';
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';
@@ -29,11 +29,21 @@ export function setApiOption(option: 'REST' | 'GraphQL') {
 }
 
 export async function getAllUsersAPI() {
-  if( apiOption == 'GraphQL' ) 
-    return await queryGetAllUsers();
+  //if( apiOption == 'GraphQL' ) 
+  //return await queryGetAllUsers();
   //apiOption == 'REST'  
-  return await getAllUsersREST();
+   return await getAllUsersREST();
 }
+
+export async function registerUserAPI(login: string, fullname: string, password: string) {
+  //if( apiOption == 'GraphQL' ) {
+    return await mutationRegisterUser({ login, fullName: fullname, password });
+  //}
+  //apiOption == 'REST'  
+  //return await registerUserREST(login, fullname, password);
+}
+
+// ---------------------------- Added support for GraphQL API
 
 export async function refreshLoginAPI() {
   if( apiOption == 'GraphQL' ) 
@@ -63,12 +73,7 @@ export async function loginUserAPI(userId: number, password: string) {
   return await loginUserREST(userId, password);
 }
 
-export async function registerUserAPI(login: string, fullname: string, password: string) {
-  if( apiOption == 'GraphQL' ) 
-    return null; // GraphQL version not implemented 
-  //apiOption == 'REST'  
-  return await registerUserREST(login, fullname, password);
-}
+
 
 // SUDOKU game API functions ----------------------------------------------
 export async function getSudokuBoardsAPI(){

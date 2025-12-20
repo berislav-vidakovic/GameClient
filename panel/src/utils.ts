@@ -37,7 +37,9 @@ export async function loginUser(userId: number, password: string) {
 
 export async function registerUser(login: string, fullname: string, password: string) {
   const jsonResp = await registerUserAPI(login, fullname, password);
-  handleResponseSignUp( jsonResp );
+  
+  console.log("Register User Response: ", jsonResp );
+  //handleResponseSignUp( jsonResp );
 }
 
 

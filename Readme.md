@@ -307,7 +307,7 @@ This is common codebase, with runtime configuration-based switch to one of the f
 - GraphQL API with Hasura and PostgreSQL
 
 
-### 7. GraphQL calls
+### 7. GraphQL support
 
  - Test endpoint ping
     ```ts
@@ -342,3 +342,16 @@ This is common codebase, with runtime configuration-based switch to one of the f
     console.log( "GraphQL getAllUsers response: ", json);  
     ```
 
+- Send mutation 
+  ```ts
+  
+  ```
+
+- Add support for subscriptions
+
+  ```bash
+  npm install graphql-ws
+  ```
+
+  - Add graphqlWebSocket.ts
+  - Subscripbe from panel/App.tsx
