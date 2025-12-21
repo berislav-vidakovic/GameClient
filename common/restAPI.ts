@@ -70,9 +70,10 @@ export async function sendPOSTRequestAsync(
               : null;
   
   if( response.status === StatusCodes.BAD_REQUEST ||
-      response.status === StatusCodes.NOT_FOUND
+      response.status === StatusCodes.NOT_FOUND ||
+      response.status === StatusCodes.CONFLICT 
   ) 
-    console.error("POST returned bad request:", data );
+    console.error("POST returned Error:", data );
 
   return { status: response.status, data };
 }

@@ -108,7 +108,7 @@ export async function addGameREST(board: string, name: string){
   const body = JSON.stringify({ board, name });
   console.log("Adding game REST API call, body: ", body );
   const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuAddGame, body );
-  if( resp.status == StatusCodes.OK )
+  if( resp.status == StatusCodes.OK || resp.status == StatusCodes.CREATED )
     return resp.data;
   return null;
 }
