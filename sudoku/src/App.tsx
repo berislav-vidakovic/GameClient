@@ -1,7 +1,6 @@
 // App.tsx
 import Board from "./Board";
-import { sendPOSTRequest } from '@common/restAPI';
-import { getSudokuBoardsAPI, setTestedOkAPI } from '@common/hubAPI';
+import { addGameAPI, getSudokuBoardsAPI, setNameAPI, setTestedOkAPI, updateSolutionAPI } from '@common/hubAPI';
 import { loadCommonConfig } from '@common/config';
 import { useEffect, useState } from "react";
 import { StatusCodes } from "http-status-codes";
@@ -35,16 +34,6 @@ function App() {
     }
   }, [isConfigLoaded]);
 
-  /*
-    useEffect( () => { if( isConfigLoaded){      
-      (async() => {
-        const res = await getSudokuBoardsAPI(); 
-        handleInit(res);
-      })();
-    }
-  }, [isConfigLoaded]);
-  */
-  
 
   interface Game {
     board: string,
@@ -102,6 +91,56 @@ function App() {
     setBoardsLoaded(true);
   };
 
+  const handleSetName = (jsonResp: any, status: number) => {
+    switch(status)
+    {
+      case StatusCodes.OK:
+        const game = games.find(g=>g.board == jsonResp.board);
+        if( game ) {
+          game.name = jsonResp.name;
+          setGames([...games]);   // Trigger list refresh
+          console.log("Board name updated: ", jsonResp);
+        }
+        else  
+          console.log("Error - board not found", jsonResp);
+        break;
+      default:
+        console.log("Error encountered: ", jsonResp);
+    }
+  }
+
+  const handleSolution = (jsonResp: any, status: number) => {
+    switch(status)
+    {
+      case StatusCodes.OK:
+        const game: Game = {
+          board: jsonResp.board,
+          solution: jsonResp.solution,
+          name: jsonResp.name,
+          testedOK: false,
+          level: 2
+        };
+        games.push(game);
+        console.log("Board solution updated: ", jsonResp);
+        break;
+      default:
+        console.log("Error encountered: ", jsonResp);
+    }
+  }
+
+  const handleAddGame = (jsonResp: any, status: number) => {
+    switch(status)
+    {
+      case StatusCodes.OK:
+        console.log("Added new game: ", jsonResp);
+        sessionStorage.setItem("currentGameAdding", boardString );
+        break;
+      default:
+          console.log("Error encountered: ", jsonResp);
+
+    }
+  }
+  
   const handleTestedOK = ( jsonResp: any ) => {
     console.log("Tested OK response: ", jsonResp );
     console.log(boardString, name, games[selectedGameIdx as number].name); 
@@ -146,30 +185,21 @@ function App() {
             createEmptyBoard();
           }}
         >
-          Add game
+          Clear
         </button>
         
         <button
          onClick={()=>{                          
               console.log(boardString); 
-              sendPOSTRequest('api/sudoku/addgame', 
-                JSON.stringify({ boardString, name }), 
-              (jsonResp: any, status: number) => {
-                switch(status)
-                {
-                  case StatusCodes.OK:
-                    console.log("Added new game: ", jsonResp);
-                    sessionStorage.setItem("currentGameAdding", boardString );
-                    break;
-                  default:
-                      console.log("Error encountered: ", jsonResp);
-
-                }
-              });
+              (async() => { // IIFE
+                console.log("Adding game...");
+                const res = await addGameAPI( boardString, name ); 
+                handleAddGame(res, StatusCodes.OK);
+              })();
             }
           }   
         >
-          Board
+          Add game
         </button>
 
          {(<button
@@ -177,26 +207,10 @@ function App() {
           onClick={()=>{                          
               console.log(boardString); 
               const board = sessionStorage.getItem("currentGameAdding" );
-              sendPOSTRequest('api/sudoku/solution', 
-                    JSON.stringify({ board, solution: boardString, name }), 
-              (jsonResp: any, status: number) => {
-                  switch(status)
-                  {
-                    case StatusCodes.OK:
-                      const game: Game = {
-                        board: jsonResp.board,
-                        solution: jsonResp.solution,
-                        name: jsonResp.name,
-                        testedOK: false,
-                        level: 2
-                      };
-                      games.push(game);
-                      console.log("Board solution updated: ", jsonResp);
-                      break;
-                    default:
-                      console.log("Error encountered: ", jsonResp);
-                  }
-                });
+              (async() => { // IIFE
+                const res = await updateSolutionAPI( board as string, boardString, name ); 
+                handleSolution(res, StatusCodes.OK);
+              })();
             }
           }          
         >
@@ -211,26 +225,10 @@ function App() {
             <button
               onClick={()=>{                          
                   console.log(boardString, name, games[selectedGameIdx as number].name); 
-                  sendPOSTRequest('api/sudoku/setname', 
-                    JSON.stringify({ board: boardString, name }),  
-                      (jsonResp: any, status: number) => {
-                        switch(status)
-                        {
-                          case StatusCodes.OK:
-                            const game = games.find(g=>g.board == jsonResp.board);
-                            if( game ) {
-                              game.name = jsonResp.name;
-                              setGames([...games]);   // Trigger list refresh
-                              console.log("Board name updated: ", jsonResp);
-                            }
-                            else  
-                              console.log("Error - board not found", jsonResp);
-                            break;
-                          default:
-                            console.log("Error encountered: ", jsonResp);
-                        }
-                      }
-                  );
+                  (async() => { // IIFE
+                    const res = await setNameAPI( boardString, name ); 
+                    handleSetName(res, StatusCodes.OK);
+                  })();
                 }
               }            
             >Set Name</button>

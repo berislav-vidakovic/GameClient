@@ -68,6 +68,11 @@ export async function sendPOSTRequestAsync(
   const data  = response.status !== StatusCodes.NO_CONTENT // 204
               ? await response.json() 
               : null;
+  
+  if( response.status === StatusCodes.BAD_REQUEST ||
+      response.status === StatusCodes.NOT_FOUND
+  ) 
+    console.error("POST returned bad request:", data );
 
   return { status: response.status, data };
 }

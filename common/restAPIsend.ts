@@ -16,6 +16,9 @@ const GETlocalizationEnpoint = 'api/localization/get';
 
 const GETsudokuBoardsEnpoint = 'api/sudoku/board';
 const POSTsudokuTestedOK = 'api/sudoku/tested';
+const POSTsudokuAddGame = 'api/sudoku/addgame';
+const POSTsudokuSetName = 'api/sudoku/setname';
+const POSTsudokuSolution = 'api/sudoku/solution';
 
 
 // PANEL client API functions ----------------------------------------------
@@ -68,7 +71,11 @@ export async function loginUserREST(userId: number, password: string) {
 export async function registerUserREST(login: string, fullname: string, password: string) {
   const body = JSON.stringify({ register: { login, fullname, password } } );
   const resp:ApiResponse = await sendPOSTRequestAsync(POSTuserRegisterEndpoint, body);
-  if( resp.status == StatusCodes.OK || resp.status == StatusCodes.CREATED )
+  if(  resp.status == StatusCodes.OK 
+    || resp.status == StatusCodes.CREATED // successfully registered
+    || resp.status == StatusCodes.BAD_REQUEST // missing fields
+    || resp.status == StatusCodes.CONFLICT // user already exists
+  )
     return resp.data;
   return null;
 }
@@ -84,6 +91,31 @@ export async function getSudokuBoardsREST(){
 export async function setTestedOkREST(board: string, name: string){
   const body = JSON.stringify({ board, name });
   const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuTestedOK, body );
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+export async function setNameREST(board: string, name: string){
+  const body = JSON.stringify({ board, name });
+  const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuSetName, body );
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+export async function addGameREST(board: string, name: string){
+  const body = JSON.stringify({ board, name });
+  console.log("Adding game REST API call, body: ", body );
+  const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuAddGame, body );
+  if( resp.status == StatusCodes.OK )
+    return resp.data;
+  return null;
+}
+
+export async function updateSolutionREST(board: string, solution: string, name: string){
+  const body = JSON.stringify({ board, solution, name });
+  const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuSolution, body );
   if( resp.status == StatusCodes.OK )
     return resp.data;
   return null;

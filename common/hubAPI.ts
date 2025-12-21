@@ -18,7 +18,7 @@
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
   logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
-  setTestedOkREST } from './restAPIsend';
+  setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
 import { /*queryGetAllUsers,*/ mutationRegisterUser } from './graphQL';
 
 // Strategy pattern
@@ -90,5 +90,26 @@ export async function setTestedOkAPI(board: string, name: string){
   return await setTestedOkREST(board, name);
 }
 
+export async function setNameAPI(board: string, name: string){
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await setNameREST(board, name);
+}
+
+export async function addGameAPI(board: string, name: string){
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await addGameREST(board, name);
+}
+
+export async function updateSolutionAPI(board: string, solution: string, name: string){
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await updateSolutionREST(board, solution, name);
+}
+  
 
 // CONNECT4 game API functions --------------------------------------------
