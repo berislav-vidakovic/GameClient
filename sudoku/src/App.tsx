@@ -133,11 +133,9 @@ function App() {
   
   const handleTestedOK = ( jsonResp: any ) => {
     console.log("Tested OK response: ", jsonResp );
-    console.log(boardString, name, games[selectedGameIdx as number].name); 
     if( jsonResp ){
       const game = games.find(g=>g.board == jsonResp.board);
       if( game ) {
-        game.name = jsonResp.name;
         game.testedOK = true;        
         setGames([...games]);   // Trigger list refresh
         setTested(true);        // Update current game UI                      
@@ -198,7 +196,7 @@ function App() {
               console.log(boardString); 
               const board = sessionStorage.getItem("currentGameAdding" );
               (async() => { // IIFE
-                const res = await updateSolutionAPI( board as string, boardString, name ); 
+                const res = await updateSolutionAPI( board as string, boardString ); 
                 handleSolution(res);
               })();
             }
@@ -235,7 +233,7 @@ function App() {
               onClick={ ()=>{                          
                   console.log(boardString, name, games[selectedGameIdx as number].name);                   
                   (async() => { // Async Immediately Invoked Function Expression (IIFE)
-                    const res = await setTestedOkAPI( boardString, name ); 
+                    const res = await setTestedOkAPI( boardString ); 
                     handleTestedOK(res);
                   })();
                 }

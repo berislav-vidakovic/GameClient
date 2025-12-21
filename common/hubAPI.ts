@@ -17,9 +17,9 @@
 //  it can be normalized in these Facade functions before returning to the caller
 
 import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
-  logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
+  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-import { /*queryGetAllUsers,*/ mutationRegisterUser } from './graphQL';
+//import { /*queryGetAllUsers,*/ mutationRegisterUser } from './graphQL';
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';
@@ -37,10 +37,10 @@ export async function getAllUsersAPI() {
 
 export async function registerUserAPI(login: string, fullname: string, password: string) {
   //if( apiOption == 'GraphQL' ) {
-    return await mutationRegisterUser({ login, fullName: fullname, password });
+   // return await mutationRegisterUser({ login, fullName: fullname, password });
   //}
   //apiOption == 'REST'  
-  //return await registerUserREST(login, fullname, password);
+  return await registerUserREST(login, fullname, password);
 }
 
 // ---------------------------- Added support for GraphQL API
@@ -83,11 +83,11 @@ export async function getSudokuBoardsAPI(){
   return await getSudokuBoardsREST();
 }
 
-export async function setTestedOkAPI(board: string, name: string){
+export async function setTestedOkAPI(board: string){
   if( apiOption == 'GraphQL' ) 
     return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  return await setTestedOkREST(board, name);
+  return await setTestedOkREST(board);
 }
 
 export async function setNameAPI(board: string, name: string){
@@ -104,11 +104,11 @@ export async function addGameAPI(board: string, name: string){
   return await addGameREST(board, name);
 }
 
-export async function updateSolutionAPI(board: string, solution: string, name: string){
+export async function updateSolutionAPI(board: string, solution: string ){
   if( apiOption == 'GraphQL' ) 
     return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  return await updateSolutionREST(board, solution, name);
+  return await updateSolutionREST(board, solution );
 }
   
 

@@ -65,7 +65,7 @@ export  const handleResponseGetAllUsers = ( jsonResp: any ) => {
 
 export const handleResponseSignUp = ( jsonResp: any ) => {    
   console.log("*** HANDLE User registered: ", jsonResp );
-  if( jsonResp && jsonResp.acknowledged ) {     
+  if( jsonResp && !jsonResp.error ) {     
     console.log("User registered: ", jsonResp.user);
   }
   else {
@@ -192,7 +192,7 @@ function handleWsInvitation( jsonResp: any ){
 
 function handleWsUserRegister( jsonResp: any ){
   console.log("*** Ws-HANDLE User registered: ", jsonResp);
-  if( jsonResp.acknowledged ) { 
+  if( jsonResp ) { 
     // Construct the new user object
     const newUser: User = {
       userId: jsonResp.user.userId,

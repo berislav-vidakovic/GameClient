@@ -88,8 +88,8 @@ export async function getSudokuBoardsREST(){
   return null;
 }
 
-export async function setTestedOkREST(board: string, name: string){
-  const body = JSON.stringify({ board, name });
+export async function setTestedOkREST(board: string ){
+  const body = JSON.stringify({  board });
   const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuTestedOK, body );
   if( resp.status == StatusCodes.OK )
     return resp.data;
@@ -113,8 +113,8 @@ export async function addGameREST(board: string, name: string){
   return null;
 }
 
-export async function updateSolutionREST(board: string, solution: string, name: string){
-  const body = JSON.stringify({ board, solution, name });
+export async function updateSolutionREST(board: string, solution: string){
+  const body = JSON.stringify({ board, solution });
   const resp:ApiResponse = await sendPOSTRequestAsync( POSTsudokuSolution, body );
   if( resp.status == StatusCodes.OK )
     return resp.data;
