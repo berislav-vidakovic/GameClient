@@ -3,7 +3,6 @@ import Board from "./Board";
 import { addGameAPI, getSudokuBoardsAPI, setNameAPI, setTestedOkAPI, updateSolutionAPI } from '@common/hubAPI';
 import { loadCommonConfig } from '@common/config';
 import { useEffect, useState } from "react";
-import { StatusCodes } from "http-status-codes";
 
 function App() {
   const [isConfigLoaded, setConfigLoaded] = useState<boolean>(false);
