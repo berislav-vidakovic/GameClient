@@ -91,54 +91,45 @@ function App() {
     setBoardsLoaded(true);
   };
 
-  const handleSetName = (jsonResp: any, status: number) => {
-    switch(status)
-    {
-      case StatusCodes.OK:
-        const game = games.find(g=>g.board == jsonResp.board);
-        if( game ) {
-          game.name = jsonResp.name;
-          setGames([...games]);   // Trigger list refresh
-          console.log("Board name updated: ", jsonResp);
-        }
-        else  
-          console.log("Error - board not found", jsonResp);
-        break;
-      default:
-        console.log("Error encountered: ", jsonResp);
+  const handleSetName = (jsonResp: any ) => {
+    if(jsonResp){
+      const game = games.find(g=>g.board == jsonResp.board);
+      if( game ) {
+        game.name = jsonResp.name;
+        setGames([...games]);   // Trigger list refresh
+        console.log("Board name updated: ", jsonResp);
+      }
+      else  
+        console.log("Error - board not found", jsonResp);
     }
+    else
+      console.log("Error encountered - no valid Response for SetName ");
   }
 
-  const handleSolution = (jsonResp: any, status: number) => {
-    switch(status)
+  const handleSolution = (jsonResp: any) => {
+    if( jsonResp )
     {
-      case StatusCodes.OK:
-        const game: Game = {
-          board: jsonResp.board,
-          solution: jsonResp.solution,
-          name: jsonResp.name,
-          testedOK: false,
-          level: 2
-        };
-        games.push(game);
-        console.log("Board solution updated: ", jsonResp);
-        break;
-      default:
-        console.log("Error encountered: ", jsonResp);
+      const game: Game = {
+        board: jsonResp.board,
+        solution: jsonResp.solution,
+        name: jsonResp.name,
+        testedOK: false,
+        level: 2
+      };
+      games.push(game);
+      console.log("Board solution updated: ", jsonResp);
     }
+    else
+      console.log("Error encountered: ", jsonResp);
   }
 
-  const handleAddGame = (jsonResp: any, status: number) => {
-    switch(status)
-    {
-      case StatusCodes.OK:
-        console.log("Added new game: ", jsonResp);
-        sessionStorage.setItem("currentGameAdding", boardString );
-        break;
-      default:
-          console.log("Error encountered: ", jsonResp);
-
+  const handleAddGame = (jsonResp: any) => {
+    if( jsonResp ) {
+      console.log("Added new game: ", jsonResp);
+      sessionStorage.setItem("currentGameAdding", boardString );
     }
+    else
+      console.log("Error encountered: ", jsonResp);
   }
   
   const handleTestedOK = ( jsonResp: any ) => {
@@ -194,7 +185,7 @@ function App() {
               (async() => { // IIFE
                 console.log("Adding game...");
                 const res = await addGameAPI( boardString, name ); 
-                handleAddGame(res, StatusCodes.OK);
+                handleAddGame(res);
               })();
             }
           }   
@@ -209,7 +200,7 @@ function App() {
               const board = sessionStorage.getItem("currentGameAdding" );
               (async() => { // IIFE
                 const res = await updateSolutionAPI( board as string, boardString, name ); 
-                handleSolution(res, StatusCodes.OK);
+                handleSolution(res);
               })();
             }
           }          
@@ -227,7 +218,7 @@ function App() {
                   console.log(boardString, name, games[selectedGameIdx as number].name); 
                   (async() => { // IIFE
                     const res = await setNameAPI( boardString, name ); 
-                    handleSetName(res, StatusCodes.OK);
+                    handleSetName(res);
                   })();
                 }
               }            
