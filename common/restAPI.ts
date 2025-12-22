@@ -31,7 +31,11 @@ export interface ApiResponse {
 }
 
 export async function sendGETRequestAsync(endpoint: string): Promise<ApiResponse> {
-  const response = await fetch(`${URL_BACKEND_HTTP}/${endpoint}`, {
+  const getUrl =
+    `${URL_BACKEND_HTTP}/${endpoint}` +
+    `?id=${sessionStorage.getItem("myID")}`;
+
+  const response = await fetch(getUrl, {
     headers: {
       "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
       "Content-Type": "application/json"
