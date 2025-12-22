@@ -73,7 +73,7 @@ export async function sendPOSTRequestAsync(
       response.status === StatusCodes.NOT_FOUND ||
       response.status === StatusCodes.CONFLICT 
   ) 
-    console.error("POST returned Error:", data );
+    console.log("POST returned Error:", data );
 
   return { status: response.status, data };
 }

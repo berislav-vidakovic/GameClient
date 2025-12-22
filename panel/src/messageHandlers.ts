@@ -218,6 +218,7 @@ function handleWsUserRegister( jsonResp: any ){
 async function handleWsUserSessionUpdate( jsonMsgData: any ) {
   //var response = new { userId, isOnline = true, automaticLogout (optional) };
   //var msg = new { type = "userSessionUpdate", status = "WsStatus.OK", data = response };
+  console.log("WS- received userSessionUpdate ***********");
   const userId = jsonMsgData.userId;
   const isOnline = jsonMsgData.isOnline;    
     setUsersRegisteredRef(prev => {

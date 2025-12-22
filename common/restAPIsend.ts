@@ -4,9 +4,9 @@ import { StatusCodes } from 'http-status-codes';
 
 const GETusersEndpoint = 'api/users/all';
 const POSTuserRegisterEndpoint = 'api/users/new';
-const POSTuserLoginEndpoint = 'api/users/login';
+const POSTuserLoginEndpoint = 'api/auth/login';
 const POSTloginRefreshEndpoint = 'api/auth/refresh';
-const POSTuserLogoutEndpoint = 'api/users/logout';
+const POSTuserLogoutEndpoint = 'api/auth/logout';
 //const POSTinviteEndpoint = 'api/invitations/invite';
 //const POSTcancelEndpoint = 'api/invitations/cancel';
 //const POSTacceptEndpoint = 'api/invitations/accept';

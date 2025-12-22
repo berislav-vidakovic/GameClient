@@ -63,6 +63,7 @@ function App() {
     sendPOSTRequest( 'api/games/init', body, handleResponseInit);
     setStateFunctionRefs(setMyColor, setGameState);
   }, [isConfigLoaded, gameId]);
+  
   // Req:  { gameId, userId } 
   // Resp: { gameId, id, userName, user2Id, user2Name }  
   async function handleResponseInit( jsonResp: any, status: number ) {
