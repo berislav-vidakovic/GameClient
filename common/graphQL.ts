@@ -45,6 +45,39 @@ export async function queryGetAllUsers(){
   return json.data.getAllUsers;
 }
 
+
+export async function queryGetLocalization(){
+  const clientId = sessionStorage.getItem("myID");
+  const query = `
+    query {
+      localizations(clientId: "${clientId}") {
+        locales {
+          paramKey
+          paramValue
+          language
+        }
+      }
+    }
+  `;
+
+  const body = JSON.stringify({ query });
+
+  const res = await fetch( getGraphQLurl(), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body
+  });  
+  const json = await res.json();
+  console.log( "GraphQL queryGetLocalization response: ", json);   
+  
+  return json.data.localizations;
+}
+
+
+
+
 // GraphQL mutation
 export interface RegisterUserInput {
   login: string;

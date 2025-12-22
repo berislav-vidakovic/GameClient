@@ -16,10 +16,11 @@
 //  If REST and GraphQL would return different formats, 
 //  it can be normalized in these Facade functions before returning to the caller
 
-import { getAllUsersREST, refreshLoginREST, getLocalizationREST,
+import { refreshLoginREST, //getAllUsersREST,  getLocalizationREST,
   logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-//import { /*queryGetAllUsers,*/ mutationRegisterUser } from './graphQL';
+import { queryGetAllUsers, queryGetLocalization //, mutationRegisterUser 
+   } from './graphQL';
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';
@@ -30,9 +31,9 @@ export function setApiOption(option: 'REST' | 'GraphQL') {
 
 export async function getAllUsersAPI() {
   //if( apiOption == 'GraphQL' ) 
-  //return await queryGetAllUsers();
+  return await queryGetAllUsers();
   //apiOption == 'REST'  
-   return await getAllUsersREST();
+  // return await getAllUsersREST();
 }
 
 export async function registerUserAPI(login: string, fullname: string, password: string) {
@@ -53,10 +54,11 @@ export async function refreshLoginAPI() {
 }
 
 export async function getLocalizationAPI() {
-  if( apiOption == 'GraphQL' ) 
-    return null; // GraphQL version not implemented 
+ //if( apiOption == 'GraphQL' ) 
+   // return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  return await getLocalizationREST();
+  return await queryGetLocalization();
+  //return await getLocalizationREST();
 }
 
 export async function logoutUserAPI( userId : number) {
