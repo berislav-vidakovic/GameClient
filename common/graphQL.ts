@@ -1,48 +1,26 @@
-import { URL_BACKEND_HTTP } from './config';
-
-const getGraphQLurl = () => URL_BACKEND_HTTP + "/graphql";
+import { sendGraphQLquery } from './API';
 
 export async function queryPing(){  
   const body = JSON.stringify({ query: "{ ping }"});
-  const res = await fetch( getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });  
-  const json = await res.json();
+  const json = await sendGraphQLquery(body);
   console.log( "GraphQL Ping response: ", json);
 }
 
 export async function queryPingDb(){  
   const body = JSON.stringify({ query: "{ pingDb }"});
-  const res = await fetch( getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });  
-  const json = await res.json();
+  const json = await sendGraphQLquery(body)
   console.log( "GraphQL PingDB response: ", json);
 }
+
 
 export async function queryGetAllUsers(){
   const body = JSON.stringify({ 
     query: `{ getAllUsers { id, techstack, users { userId, login, fullName, isOnline } } }` });
 
-  const res = await fetch( getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });  
-  const json = await res.json();
-  console.log( "GraphQL getAllUsers response: ", json);   
+  const jsonData = await sendGraphQLquery(body);
+  console.log( "GraphQL getAllUsers response: ", jsonData);   
   
-  return json.data.getAllUsers;
+  return jsonData.getAllUsers;
 }
 
 
@@ -59,20 +37,12 @@ export async function queryGetLocalization(){
       }
     }
   `;
-
   const body = JSON.stringify({ query });
-
-  const res = await fetch( getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });  
-  const json = await res.json();
-  console.log( "GraphQL queryGetLocalization response: ", json);   
   
-  return json.data.localizations;
+  const jsonData = await sendGraphQLquery(body);
+  console.log( "GraphQL queryGetLocalization response: ", jsonData);   
+
+  return jsonData.localizations;
 }
 
 // GraphQL mutation
@@ -92,8 +62,7 @@ type Mutation {
 
   */
 export async function mutationRegisterUser(login: string,
-  fullName: string,
-  password: string): Promise<RegisterUserResponse> {
+  fullName: string, password: string): Promise<RegisterUserResponse> {
   const body = JSON.stringify({
     query: `
       mutation RegisterUser(
@@ -120,21 +89,10 @@ export async function mutationRegisterUser(login: string,
   });
 
   console.log("*** Sending GraphQL mutation mutationRegisterUser with body:", body);
-  const res = await fetch(getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });
-
-  const json = await res.json();
-  console.log("*** Received GraphQL mutation response ", json);
-
-  console.log("GraphQL registerUser response:", json);
-
+  const jsonData = await sendGraphQLquery(body);
+  console.log("GraphQL registerUser response:", jsonData);
   // GraphQL always wraps data in 'data'
-  return json.data.registerUser;
+  return jsonData.registerUser;
 }
 
 
@@ -187,24 +145,13 @@ export async function mutationRefreshLogin(): Promise<RefreshTokenResponse> {
 
   const variables = { clientId, refreshToken };
   const body = JSON.stringify({ query, variables });
-  const res = await fetch(getGraphQLurl(), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body
-  });
 
-  const json = await res.json();
-  console.log("*** Received GraphQL mutation response ", json);
-  
-
-  console.log("GraphQL refreshToken response:", json);
+  const jsonData = await sendGraphQLquery(body);
+  console.log("GraphQL refreshToken response:", jsonData);
 
   // GraphQL always wraps data in 'data'
-  return json.data.refreshToken;
+  return jsonData.refreshToken;
 }
 
 
-
-
+// generic function

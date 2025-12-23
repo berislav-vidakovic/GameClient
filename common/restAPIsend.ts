@@ -1,5 +1,5 @@
-import { sendGETRequestAsync, sendPOSTRequestAsync } from './restAPI';
-import type { ApiResponse } from './restAPI';
+import { sendGETRequestAsync, sendPOSTRequestAsync } from './API';
+import type { ApiResponse } from './API';
 import { StatusCodes } from 'http-status-codes';
 
 const GETusersEndpoint = 'api/users/all';

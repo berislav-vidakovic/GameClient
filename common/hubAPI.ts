@@ -16,10 +16,12 @@
 //  If REST and GraphQL would return different formats, 
 //  it can be normalized in these Facade functions before returning to the caller
 
-import { //refreshLoginREST, // getAllUsersREST,  //getLocalizationREST,
+import { //refreshLoginREST, 
+ getAllUsersREST, 
+//  //getLocalizationREST,
   logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-import { queryGetAllUsers, queryGetLocalization, mutationRegisterUser,
+import { /*queryGetAllUsers,*/ queryGetLocalization, mutationRegisterUser,
   mutationRefreshLogin 
    } from './graphQL';
 
@@ -32,9 +34,9 @@ export function setApiOption(option: 'REST' | 'GraphQL') {
 
 export async function getAllUsersAPI() {
   //if( apiOption == 'GraphQL' ) 
-  return await queryGetAllUsers();
+  //return await queryGetAllUsers();
   //apiOption == 'REST'  
-  // return await getAllUsersREST();
+   return await getAllUsersREST();
 }
 
 export async function getLocalizationAPI() {
