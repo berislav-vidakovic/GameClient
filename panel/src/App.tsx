@@ -59,10 +59,14 @@ function App() {
       setInvitationState, setSelectedGame, setTechStack );      
     
     getAllUsers(); // calls setInitialized in response handler
+   }      
+  }, [isConfigLoaded]); 
+
+  useEffect( () => { if( isInitialized){
     getLocalization();
     setLocalesLoaded(true); // mark locales as loaded
    }      
-  }, [isConfigLoaded]); 
+  }, [isInitialized]); 
 
   useEffect( () => { if( isConfigLoaded && isInitialized){
       connectWS( setWsConnected, handleWsMessage );
