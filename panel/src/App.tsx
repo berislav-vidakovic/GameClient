@@ -63,8 +63,9 @@ function App() {
   }, [isConfigLoaded]); 
 
   useEffect( () => { if( isInitialized){
-    getLocalization();
-    setLocalesLoaded(true); // mark locales as loaded
+    getLocalization().then(() => {
+      setLocalesLoaded(true); // localization is loaded
+    });
    }      
   }, [isInitialized]); 
 

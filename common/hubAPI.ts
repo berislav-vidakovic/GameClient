@@ -17,9 +17,9 @@
 //  it can be normalized in these Facade functions before returning to the caller
 
 import { refreshLoginREST, // getAllUsersREST,  //getLocalizationREST,
-  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
+  logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-import { queryGetAllUsers, queryGetLocalization //, mutationRegisterUser 
+import { queryGetAllUsers, queryGetLocalization, mutationRegisterUser 
    } from './graphQL';
 
 // Strategy pattern
@@ -38,19 +38,10 @@ export async function getAllUsersAPI() {
 
 export async function registerUserAPI(login: string, fullname: string, password: string) {
   //if( apiOption == 'GraphQL' ) {
-   // return await mutationRegisterUser({ login, fullName: fullname, password });
+    return await mutationRegisterUser({ login, fullName: fullname, password });
   //}
   //apiOption == 'REST'  
-  return await registerUserREST(login, fullname, password);
-}
-
-// ---------------------------- Added support for GraphQL API
-
-export async function refreshLoginAPI() {
-  if( apiOption == 'GraphQL' ) 
-    return null; // GraphQL version not implemented 
-  //apiOption == 'REST'  
-  return await refreshLoginREST();
+  //return await registerUserREST(login, fullname, password);
 }
 
 export async function getLocalizationAPI() {
@@ -60,6 +51,16 @@ export async function getLocalizationAPI() {
   return await queryGetLocalization();
   //return await getLocalizationREST();
 }
+
+// ---------------------------- Added support for GraphQL API (end)-------------
+
+export async function refreshLoginAPI() {
+  if( apiOption == 'GraphQL' ) 
+    return null; // GraphQL version not implemented 
+  //apiOption == 'REST'  
+  return await refreshLoginREST();
+}
+
 
 export async function logoutUserAPI( userId : number) {
   if( apiOption == 'GraphQL' ) 
