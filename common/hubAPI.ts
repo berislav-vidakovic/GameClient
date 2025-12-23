@@ -16,10 +16,11 @@
 //  If REST and GraphQL would return different formats, 
 //  it can be normalized in these Facade functions before returning to the caller
 
-import { refreshLoginREST, // getAllUsersREST,  //getLocalizationREST,
+import { //refreshLoginREST, // getAllUsersREST,  //getLocalizationREST,
   logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-import { queryGetAllUsers, queryGetLocalization, mutationRegisterUser 
+import { queryGetAllUsers, queryGetLocalization, mutationRegisterUser,
+  mutationRefreshLogin 
    } from './graphQL';
 
 // Strategy pattern
@@ -36,14 +37,6 @@ export async function getAllUsersAPI() {
   // return await getAllUsersREST();
 }
 
-export async function registerUserAPI(login: string, fullname: string, password: string) {
-  //if( apiOption == 'GraphQL' ) {
-    return await mutationRegisterUser({ login, fullName: fullname, password });
-  //}
-  //apiOption == 'REST'  
-  //return await registerUserREST(login, fullname, password);
-}
-
 export async function getLocalizationAPI() {
  //if( apiOption == 'GraphQL' ) 
    // return null; // GraphQL version not implemented 
@@ -52,14 +45,26 @@ export async function getLocalizationAPI() {
   //return await getLocalizationREST();
 }
 
-// ---------------------------- Added support for GraphQL API (end)-------------
+export async function registerUserAPI(login: string, fullname: string, password: string) {
+  //if( apiOption == 'GraphQL' ) {
+    return await mutationRegisterUser({ login, fullName: fullname, password });
+  //}
+  //apiOption == 'REST'  
+  //return await registerUserREST(login, fullname, password);
+}
+
+
 
 export async function refreshLoginAPI() {
-  if( apiOption == 'GraphQL' ) 
-    return null; // GraphQL version not implemented 
+  //if( apiOption == 'GraphQL' ) 
+  return await mutationRefreshLogin();
+    //return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  return await refreshLoginREST();
+  //return await refreshLoginREST();
 }
+
+// ---------------------------- Added support for GraphQL API (end)-------------
+
 
 
 export async function logoutUserAPI( userId : number) {

@@ -20,7 +20,8 @@ export async function getAllUsers() {
 }
 
 export async function loginRefresh(handleLoginRefresh: (data: any) => void) {  
-  const jsonResp: string = await refreshLoginAPI();
+  const jsonResp = await refreshLoginAPI();
+  console.log("RESPONSE of refreshLoginAPI: ", jsonResp);
   handleLoginRefresh( jsonResp);  
 }
 

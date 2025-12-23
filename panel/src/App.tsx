@@ -83,7 +83,7 @@ function App() {
 
   const handleLoginRefresh = ( jsonResp: any) => {
     // Response { accessToken, refreshToken, userId }
-    if( jsonResp ) {
+    if( jsonResp && !jsonResp.error ) {
       sessionStorage.setItem("accessToken", jsonResp.accessToken );
       sessionStorage.setItem("refreshToken", jsonResp.refreshToken );
       setCurrentUserId( jsonResp.userId );
