@@ -47,7 +47,7 @@ export async function getLocalizationAPI() {
 
 export async function registerUserAPI(login: string, fullname: string, password: string) {
   //if( apiOption == 'GraphQL' ) {
-    return await mutationRegisterUser({ login, fullName: fullname, password });
+    return await mutationRegisterUser( login, fullname, password );
   //}
   //apiOption == 'REST'  
   //return await registerUserREST(login, fullname, password);

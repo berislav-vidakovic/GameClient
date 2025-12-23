@@ -76,12 +76,6 @@ export async function queryGetLocalization(){
 }
 
 // GraphQL mutation
-export interface RegisterUserInput {
-  login: string;
-  fullName: string;
-  password: string;
-}
-
 export interface RegisterUserResponse {
   acknowledged: boolean;
   error?: string;
@@ -93,28 +87,36 @@ export interface RegisterUserResponse {
 }
 /* Schema on backend
 type Mutation {
-    registerUser(input: RegisterUserInput!): RegisterUserPayload!
+  registerUser( login: String!, fullName: String!, password: String!): RegisterUserPayload!
 }
 
   */
-export async function mutationRegisterUser(input: RegisterUserInput): Promise<RegisterUserResponse> {
+export async function mutationRegisterUser(login: string,
+  fullName: string,
+  password: string): Promise<RegisterUserResponse> {
   const body = JSON.stringify({
     query: `
-      mutation RegisterUser($input: RegisterUserInput!) {
-        registerUser(input: $input) {
-          acknowledged
-          error
-          user {
-            userId
-            login
-            fullName
-          }
+      mutation RegisterUser(
+        $login: String!
+        $fullName: String!
+        $password: String!
+        ) {
+        registerUser(
+          login: $login
+          fullName: $fullName
+          password: $password
+          ) {
+            acknowledged
+            error
+            user {
+              userId
+              login
+              fullName
+            }
         }
       }
     `,
-    variables: {
-      input
-    }
+    variables: { login, fullName, password }
   });
 
   console.log("*** Sending GraphQL mutation mutationRegisterUser with body:", body);
