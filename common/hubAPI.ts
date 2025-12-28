@@ -16,14 +16,12 @@
 //  If REST and GraphQL would return different formats, 
 //  it can be normalized in these Facade functions before returning to the caller
 
-import { //refreshLoginREST, 
- getAllUsersREST, 
-//  //getLocalizationREST,
-  logoutUserREST, loginUserREST, /*registerUserREST,*/ getSudokuBoardsREST,
+import { refreshLoginREST, getAllUsersREST, getLocalizationREST,
+  logoutUserREST, loginUserREST, registerUserREST, getSudokuBoardsREST,
   setTestedOkREST, updateSolutionREST, addGameREST, setNameREST} from './restAPIsend';
-import { /*queryGetAllUsers,*/ queryGetLocalization, mutationRegisterUser,
-  mutationRefreshLogin 
-   } from './graphQL';
+//import { /*queryGetAllUsers,*/ queryGetLocalization, mutationRegisterUser,
+  //mutationRefreshLogin 
+   //} from './graphQL';
 
 // Strategy pattern
 let apiOption: 'REST' | 'GraphQL' = 'REST';
@@ -43,24 +41,24 @@ export async function getLocalizationAPI() {
  //if( apiOption == 'GraphQL' ) 
    // return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  return await queryGetLocalization();
-  //return await getLocalizationREST();
+  //return await queryGetLocalization();
+  return await getLocalizationREST();
 }
 
 export async function registerUserAPI(login: string, fullname: string, password: string) {
   //if( apiOption == 'GraphQL' ) {
-    return await mutationRegisterUser( login, fullname, password );
+  //  return await mutationRegisterUser( login, fullname, password );
   //}
   //apiOption == 'REST'  
-  //return await registerUserREST(login, fullname, password);
+  return await registerUserREST(login, fullname, password);
 }
 
 export async function refreshLoginAPI() {
   //if( apiOption == 'GraphQL' ) 
-  return await mutationRefreshLogin();
+  //return await mutationRefreshLogin();
     //return null; // GraphQL version not implemented 
   //apiOption == 'REST'  
-  //return await refreshLoginREST();
+  return await refreshLoginREST();
 }
 
 // ---------------------------- Added support for GraphQL API (end)-------------
