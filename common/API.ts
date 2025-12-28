@@ -1,7 +1,7 @@
 import { URL_BACKEND_HTTP } from './config';
 import { StatusCodes } from "http-status-codes"
 
-const getGraphQLurl = () => URL_BACKEND_HTTP + "/graphql";
+export const getGraphQLurl = () => URL_BACKEND_HTTP + "/graphql";
 
 // REST API -----------------------------------------------------------
 export interface ApiResponse {

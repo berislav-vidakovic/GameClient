@@ -1,13 +1,17 @@
-import { sendGraphQLquery } from './API';
+import { sendGraphQLquery, getGraphQLurl } from './API';
+
 
 export async function queryPing(){  
   const body = JSON.stringify({ query: "{ ping }"});
+  console.log("Sending GraphQL ping query to: ", getGraphQLurl() );
   const json = await sendGraphQLquery(body);
   console.log( "GraphQL Ping response: ", json);
 }
 
 export async function queryPingDb(){  
   const body = JSON.stringify({ query: "{ pingDb }"});
+  console.log("Sending GraphQL pingDB query to: ", getGraphQLurl() );
+
   const json = await sendGraphQLquery(body)
   console.log( "GraphQL PingDB response: ", json);
 }
