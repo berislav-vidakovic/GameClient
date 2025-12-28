@@ -1,7 +1,7 @@
 // common/config.ts
 
 import type { Dispatch, SetStateAction } from "react";
-//import { queryPing, queryPingDb } from './graphQL';
+import { queryPing, queryPingDb } from './graphQL';
 import { getLocalizationAPI, setApiOption } from './hubAPI';
 
 import type { Locales } from './interfaces';
@@ -65,8 +65,8 @@ export async function loadCommonConfig(
   }
 
   // GraphQL healthcheck 
-  //await queryPing();
-  //await queryPingDb();
+  await queryPing();
+  await queryPingDb();
 
   setConfigLoaded(true);
 }
