@@ -1,5 +1,8 @@
 name: Deploy TypeScript Frontend
 
+env:
+  SSH_PORT: 2026
+
 on:
   push:
     branches:
@@ -45,14 +48,14 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p 2222 barryonweb.com >> ~/.ssh/known_hosts
+          ssh-keyscan -p $SSH_PORT barryonweb.com >> ~/.ssh/known_hosts
       
       # Nginx config - transfer, enable, check syntax and restart Nginx
       - name: Update Nginx config
         run: |
-          ssh -p 2222 barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
-          scp -P 2222 gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
-          ssh -p 2222 barry75@barryonweb.com "
+          ssh -p $SSH_PORT barry75@barryonweb.com "mkdir -p /var/www/games/nginx"
+          scp -P $SSH_PORT gamesjclient.barryonweb.com barry75@barryonweb.com:/var/www/games/nginx/
+          ssh -p $SSH_PORT barry75@barryonweb.com "
             sudo cp /var/www/games/nginx/gamesjclient.barryonweb.com /etc/nginx/sites-available/ &&
             sudo ln -sf /etc/nginx/sites-available/gamesjclient.barryonweb.com /etc/nginx/sites-enabled/ &&
             sudo nginx -t &&
@@ -62,7 +65,7 @@ jobs:
       # Transfer frontend from GitHub Repo to Ubuntu server via SCP
       - name: Deploy frontend via SSH to server
         run: |
-          rsync -az -e "ssh -p 2222" panel/dist/ barry75@barryonweb.com:/var/www/games/frontend/panel/
-          rsync -az -e "ssh -p 2222" sudoku/dist/ barry75@barryonweb.com:/var/www/games/frontend/sudoku/
-          rsync -az -e "ssh -p 2222" connect4/dist/ barry75@barryonweb.com:/var/www/games/frontend/connect4/
+          rsync -az -e "ssh -p $SSH_PORT" panel/dist/ barry75@barryonweb.com:/var/www/games/frontend/panel/
+          rsync -az -e "ssh -p $SSH_PORT" sudoku/dist/ barry75@barryonweb.com:/var/www/games/frontend/sudoku/
+          rsync -az -e "ssh -p $SSH_PORT" connect4/dist/ barry75@barryonweb.com:/var/www/games/frontend/connect4/
 

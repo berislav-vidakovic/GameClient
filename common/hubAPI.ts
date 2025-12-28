@@ -55,8 +55,6 @@ export async function registerUserAPI(login: string, fullname: string, password:
   //return await registerUserREST(login, fullname, password);
 }
 
-
-
 export async function refreshLoginAPI() {
   //if( apiOption == 'GraphQL' ) 
   return await mutationRefreshLogin();
@@ -66,8 +64,6 @@ export async function refreshLoginAPI() {
 }
 
 // ---------------------------- Added support for GraphQL API (end)-------------
-
-
 
 export async function logoutUserAPI( userId : number) {
   if( apiOption == 'GraphQL' ) 
@@ -82,7 +78,6 @@ export async function loginUserAPI(userId: number, password: string) {
   //apiOption == 'REST'  
   return await loginUserREST(userId, password);
 }
-
 
 
 // SUDOKU game API functions ----------------------------------------------
